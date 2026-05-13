@@ -8,6 +8,7 @@
 ;=================================================================
 .segment "ZEROPAGE"
 controller1:   .res 1
+game_timer:    .res 1
 frame_counter: .res 1
 frame_ready:   .res 1
 player_x:      .res 1
@@ -102,6 +103,10 @@ wait_vblank2:
 ; Init game data
 ;=================================================================
 .proc init_game
+	; Init game timer
+	LDA #$08
+	STA game_timer
+
 	; Set player position
 	LDA #$80
 	STA player_x
@@ -263,25 +268,37 @@ check_right:
 	LDA controller1
 	AND #%00000001
 	BEQ check_left
-	INC player_x
+	CLC
+	LDA player_x
+	ADC #$08
+	STA player_x
 
 check_left:
 	LDA controller1
 	AND #%00000010
 	BEQ check_down
-	DEC player_x
+	SEC
+	LDA player_x
+	SBC #$08
+	STA player_x
 
 check_down:
 	LDA controller1
 	AND #%00000100
 	BEQ check_up
-	INC player_y
+	CLC
+	LDA player_y
+	ADC #$08
+	STA player_y
 
 check_up:
 	LDA controller1
 	AND #%00001000
 	BEQ done
-	DEC player_y
+	SEC
+	LDA player_y
+	SBC #$08
+	STA player_y
 
 done:
 	RTS
@@ -303,14 +320,26 @@ main_loop:
 wait_frame:
 	LDA frame_ready
 	BEQ wait_frame
-	
+
+	; frame consumed
 	LDA #$00
 	STA frame_ready
 
 	JSR read_controller1
+
+	; Gameplay timer
+	LDA game_timer
+	BEQ timer_done
+
+	DEC game_timer
+	JMP render
+
+timer_done:
+	LDA #GAME_TIMER_COUNT
+	STA game_timer
 	JSR update_game
+
+render:
 	JSR build_oam
-	
 	JMP main_loop
 .endproc
-

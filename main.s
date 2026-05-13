@@ -1,4 +1,5 @@
 .include "inc/constants.s"
+.include "inc/macros.s"
 .include "inc/header.s"
 .include "inc/vectors.s"
 
@@ -224,30 +225,7 @@ clear_loop:
 ;=================================================================
 .proc build_oam
 	; @ (player)
-	; Y position
-	LDA player_y
-	STA oam+$00
-	
-	; Sprite index
-	LDA #$40
-	STA oam+$01
-	
-	; Attribute Byte
-	LDA #$00
-	STA oam+$02
-;		76543210
-;		||||||||
-;		||||||++- palette (0-3)
-;		|||||+--- unused
-;		||||+---- priority
-;		|||+----- flip horizontal
-;		||+------ flip vertical
-;		++------- unused
-	
-	; X position
-	LDA player_x
-	STA oam+$03
-	
+	SPRITE $00, player_y, $40, OAM_PAL0, player_x
 	RTS
 .endproc
 
@@ -330,8 +308,8 @@ wait_frame:
 	STA frame_ready
 
 	JSR read_controller1
-	JSR build_oam
 	JSR update_game
+	JSR build_oam
 	
 	JMP main_loop
 .endproc

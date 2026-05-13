@@ -226,15 +226,15 @@ clear_loop:
 	; @ (player)
 	; Y position
 	LDA player_y
-	STA oam+0
+	STA oam+$00
 	
 	; Sprite index
 	LDA #$40
-	STA oam+1
+	STA oam+$01
 	
 	; Attribute Byte
 	LDA #$00
-	STA oam+2
+	STA oam+$02
 ;		76543210
 ;		||||||||
 ;		||||||++- palette (0-3)
@@ -246,7 +246,7 @@ clear_loop:
 	
 	; X position
 	LDA player_x
-	STA oam+3
+	STA oam+$03
 	
 	RTS
 .endproc

@@ -260,31 +260,31 @@ read_loop:
 .proc update_player
 
 check_right:
-	   LDA controller1
-	   AND #%00000001
-	   BEQ check_left
-	   INC player_x
+	LDA controller1
+	AND #%00000001
+	BEQ check_left
+	INC player_x
 
 check_left:
-	   LDA controller1
-	   AND #%00000010
-	   BEQ check_down
-	   DEC player_x
+	LDA controller1
+	AND #%00000010
+	BEQ check_down
+	DEC player_x
 
 check_down:
-	   LDA controller1
-	   AND #%00000100
-	   BEQ check_up
-	   INC player_y
+	LDA controller1
+	AND #%00000100
+	BEQ check_up
+	INC player_y
 
 check_up:
-	   LDA controller1
-	   AND #%00001000
-	   BEQ done
-	   DEC player_y
+	LDA controller1
+	AND #%00001000
+	BEQ done
+	DEC player_y
 
 done:
-    RTS
+	RTS
 .endproc
 
 .proc update_game

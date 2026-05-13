@@ -103,9 +103,9 @@ wait_vblank2:
 ;=================================================================
 .proc init_game
 	; Set player position
-	LDA #120
+	LDA #$80
 	STA player_x
-	LDA #100
+	LDA #$64
 	STA player_y
 	RTS
 .endproc

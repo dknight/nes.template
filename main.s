@@ -270,8 +270,10 @@ check_right:
 	BEQ check_left
 	CLC
 	LDA player_x
-	ADC #$08
+	ADC #$08 ; move step
 	STA player_x
+	; Doesn't allow to move by diagonal, remove RTS to allow diagonal movement
+	RTS
 
 check_left:
 	LDA controller1
@@ -281,6 +283,7 @@ check_left:
 	LDA player_x
 	SBC #$08
 	STA player_x
+	RTS
 
 check_down:
 	LDA controller1
@@ -290,6 +293,7 @@ check_down:
 	LDA player_y
 	ADC #$08
 	STA player_y
+	RTS
 
 check_up:
 	LDA controller1
@@ -299,6 +303,7 @@ check_up:
 	LDA player_y
 	SBC #$08
 	STA player_y
+	RTS
 
 done:
 	RTS

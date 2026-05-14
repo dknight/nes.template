@@ -198,7 +198,7 @@ palette_loop:
 	STA PPU_DATA
 	
 	INX
-	CPX #32
+	CPX #$20
 	BNE palette_loop
 	
 	RTS

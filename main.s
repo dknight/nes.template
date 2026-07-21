@@ -72,6 +72,18 @@ wait_vblank2:
 	JSR clear_oam
 	JSR load_palette
 	JSR build_oam
+
+	LDA PPU_STATUS      ; reset latch
+
+	; Reset scroll
+	LDA #$00
+	STA PPU_SCROLL      ; Two values X and Y
+	STA PPU_SCROLL
+
+	LDA #$20
+	STA PPU_ADDR
+	LDA #$00
+	STA PPU_ADDR
 	
 	; enable rendering
 	LDA #%00011110
@@ -141,6 +153,12 @@ wait_vblank2:
 	
 	; Increment frame counter
 	INC frame_counter
+
+	; Reset scroll
+	LDA PPU_STATUS
+	LDA #$00
+	STA PPU_SCROLL ; two values X and Y
+	STA PPU_SCROLL
 	
 	; Restore registers
 	PLA

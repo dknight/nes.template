@@ -73,13 +73,12 @@ wait_vblank2:
 	JSR load_palette
 	JSR build_oam
 
+	; Reset PPU scroll/address after VRAM updates.
+	; Without this the screen may start rendering with an unexpected offset.
 	LDA PPU_STATUS      ; reset latch
-
-	; Reset scroll
 	LDA #$00
 	STA PPU_SCROLL      ; Two values X and Y
 	STA PPU_SCROLL
-
 	LDA #$20
 	STA PPU_ADDR
 	LDA #$00

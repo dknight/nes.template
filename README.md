@@ -1,13 +1,75 @@
-# NES Program Template
+# NES Game Template
 
-Getting started with NES development can be difficult because even a simple program requires a lot of boilerplate code. This template provides a minimal setup that compiles and displays an **@** symbol that can be moved around the screen using the D-pad. Everything is already configured so you can immediately start building your game.
+Most tutorials start with a blank screen and require writing a large amount of setup code before any gameplay can be implemented.
+
+The template provides a clean project structure and a working game loop so developers can immediately focus on writing game logic instead of hardware initialization.
+
+## Features
+
+- ✔ iNES header
+- ✔ Reset and NMI handlers
+- ✔ Controller input
+- ✔ OAM DMA
+- ✔ Palette loading
+- ✔ Nametable loading
+- ✔ Sprite rendering
+- ✔ Camera support
+- ✔ Timer system
+- ✔ Modular project layout
+
+A simple demo is included where the player sprite can be moved with the D-pad.
 
 ![NES Demo](nesdemo.gif)
 
 Also check setup NES develop for GNU Linux [setup](https://www.whoop.ee/post/nes-development-on-linux.html).
-## Current Limitations
 
-Memory bank switching is not supported yet. The template currently supports only a single PRG bank.
+## Project Structure and Architecture
+
+```
+assets/          CHR graphics.
+constants/       Hardware registers, memory layout and constants.
+
+core/            Hardware abstraction and low-level NES functionality.
+    header.s
+    reset.s
+    nmi.s
+    dma.s
+    input.s
+    memory.sThis
+    macros.s
+
+game/            Game-specific logic.
+    game.s
+    player.s
+    enemies.s
+    projectiles.s
+    timers.s
+    camera.s
+    state.s
+
+gfx/              Everything related to rendering.
+    renderer.s
+    sprites.s
+    palettes.s
+    tiles.s
+    nametable.s
+
+assets/           CHR graphics and other binary assets.
+	patterns.chr
+
+main.s            Main game loop
+```
+
+## Roadmap
+
+Planned features:
+
+- PRG bank switching
+- Mapper support
+- Sound engine
+- Collision helpers
+- Animation system
+- Object pool utilities
 
 ## License
 

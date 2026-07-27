@@ -34,7 +34,7 @@ make run
 ## Project Structure and Architecture
 
 ```
-assets/               CHR graphics.
+assets/               CHR graphics and other binary assets.
 constants/            Hardware registers, memory layout and constants.
 src/
     core/             Hardware abstraction and low-level NES functionality.

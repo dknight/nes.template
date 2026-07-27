@@ -25,8 +25,8 @@ Also check setup NES develop for GNU Linux [setup](https://www.whoop.ee/post/nes
 ## Project Structure and Architecture
 
 ```
-assets/          CHR graphics.
-constants/       Hardware registers, memory layout and constants.
+assets/               CHR graphics.
+constants/            Hardware registers, memory layout and constants.
 
 src/
     core/             Hardware abstraction and low-level NES functionality.

@@ -36,7 +36,6 @@ make run
 ```
 assets/               CHR graphics.
 constants/            Hardware registers, memory layout and constants.
-
 src/
     core/             Hardware abstraction and low-level NES functionality.
     game/             Game-specific logic.

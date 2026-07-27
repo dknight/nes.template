@@ -29,13 +29,12 @@ assets/          CHR graphics.
 constants/       Hardware registers, memory layout and constants.
 
 src/
-    core/        Hardware abstraction and low-level NES functionality.
-    game/        Game-specific logic.
-    gfx/         Everything related to rendering.
-assets/          CHR graphics and other binary assets.
+    core/             Hardware abstraction and low-level NES functionality.
+    game/             Game-specific logic.
+    gfx/              Everything related to rendering.
+    main.s            Main game loop
+assets/               CHR graphics and other binary assets.
     patterns.chr
-
-main.s            Main game loop
 ```
 
 ## Roadmap

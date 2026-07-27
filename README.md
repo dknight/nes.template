@@ -6,16 +6,15 @@ The template provides a clean project structure and a working game loop so devel
 
 ## Features
 
-- ✔ iNES header
-- ✔ Reset and NMI handlers
-- ✔ Controller input
-- ✔ OAM DMA
-- ✔ Palette loading
-- ✔ Nametable loading
-- ✔ Sprite rendering
-- ✔ Camera support
-- ✔ Timer system
-- ✔ Modular project layout
+- iNES header
+- Reset and NMI handlers
+- Controller input
+- OAM DMA
+- Palette loading
+- Nametable loading
+- Sprite rendering
+- Timer system
+- Modular project layout
 
 A simple demo is included where the player sprite can be moved with the D-pad.
 
@@ -70,6 +69,7 @@ Planned features:
 - Collision helpers
 - Animation system
 - Object pool utilities
+- Camera support
 
 ## License
 

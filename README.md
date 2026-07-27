@@ -28,33 +28,12 @@ Also check setup NES develop for GNU Linux [setup](https://www.whoop.ee/post/nes
 assets/          CHR graphics.
 constants/       Hardware registers, memory layout and constants.
 
-core/            Hardware abstraction and low-level NES functionality.
-    header.s
-    reset.s
-    nmi.s
-    dma.s
-    input.s
-    memory.sThis
-    macros.s
-
-game/            Game-specific logic.
-    game.s
-    player.s
-    enemies.s
-    projectiles.s
-    timers.s
-    camera.s
-    state.s
-
-gfx/              Everything related to rendering.
-    renderer.s
-    sprites.s
-    palettes.s
-    tiles.s
-    nametable.s
-
-assets/           CHR graphics and other binary assets.
-	patterns.chr
+src/
+    core/        Hardware abstraction and low-level NES functionality.
+    game/        Game-specific logic.
+    gfx/         Everything related to rendering.
+assets/          CHR graphics and other binary assets.
+    patterns.chr
 
 main.s            Main game loop
 ```

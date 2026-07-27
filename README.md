@@ -34,13 +34,13 @@ make run
 ## Project Structure and Architecture
 
 ```
-assets/               CHR graphics and other binary assets.
-constants/            Hardware registers, memory layout and constants.
 src/
     core/             Hardware abstraction and low-level NES functionality.
     game/             Game-specific logic.
     gfx/              Everything related to rendering.
-    main.s            Main game loop
+    include/          Common include files.
+    main.s            Main game loop.
+builds/               Builds output.
 assets/               CHR graphics and other binary assets.
     patterns.chr
 ```

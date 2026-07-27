@@ -18,8 +18,9 @@ LD := ld65
 #--------------------------------------------------------------------------
 # Files
 #--------------------------------------------------------------------------
-SRC := $(SRC_DIR)/$(TARGET).s
-OBJ := $(BUILD_DIR)/$(TARGET).o
+SRC := $(shell find $(SRC_DIR) -name '*.s' | sort)
+OBJ := $(patsubst src/%.s,$(BUILD_DIR)/%.o,$(SRC))
+
 ROM := $(BUILD_DIR)/$(TARGET).nes
 CFG := nes.cfg
 
@@ -31,11 +32,12 @@ all: $(ROM)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-$(OBJ): $(SRC) | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.s
+	@mkdir -p $(dir $@)
 	$(AS) -g -o $@ $<
 
 $(ROM): $(OBJ)
-	$(LD) -C $(CFG) -o $@ $<
+	$(LD) -C $(CFG) -o $@ $^
 
 #--------------------------------------------------------------------------
 # Utilities
@@ -46,4 +48,4 @@ run: $(ROM)
 clean:
 	rm -rf $(BUILD_DIR)
 
-.PHONY: all run clean
+.PHONY: run clean

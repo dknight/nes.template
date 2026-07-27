@@ -1,3 +1,7 @@
+.importzp player_x
+.importzp player_y
+.import state_init
+
 ;=================================================================
 ; Define game constants and configurations
 ;=================================================================

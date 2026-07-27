@@ -1,3 +1,6 @@
+.importzp controller01_state
+.import oam
+
 ;==========================================================
 ; Define player constants and configurations
 ;==========================================================

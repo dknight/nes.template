@@ -1,29 +1,18 @@
-.include "core/header.s"
-.include "core/macros.s"
-.include "core/vectors.s"
-.include "core/reset.s"
-.include "core/nmi.s"
-.include "core/input.s"
-.include "core/ppu.s"
-.include "core/apu.s"
-.include "core/dma.s"
-.include "core/memory/zp.s"
-.include "core/memory/oam.s"
+.include "include/header.inc"
+.include "include/macros.inc"
+.include "include/vectors.inc"
 
-.include "gfx/renderer.s"
-.include "gfx/sprites.s"
-.include "gfx/tiles.s"
-.include "gfx/palettes.s"
-.include "gfx/nametable.s"
+.export main
 
-.include "game/state.s"
-.include "game/game.s"
-.include "game/timers.s"
-.include "game/tick.s"
-.include "game/player.s"
-.include "game/enemies.s"
-.include "game/projectiles.s"
-.include "game/camera.s"
+.import nmi
+.import irq
+.import render
+.import game_tick
+.import game_poll
+.import wait_frame
+.import timers_update
+.import input_poll
+.import reset
 
 ;=================================================================
 ; Main application logic section includes the game loop

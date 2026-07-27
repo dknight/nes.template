@@ -1,5 +1,8 @@
 .include "game.inc"
 
+.exportzp game_timer
+.export game_init
+
 .segment "ZEROPAGE"
 game_timer: .res 1
 

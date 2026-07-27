@@ -1,3 +1,6 @@
+.export attribute_table
+.export nametable
+
 .segment "RODATA"
 
 ;=================================================================

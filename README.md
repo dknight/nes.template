@@ -14,13 +14,22 @@ The template provides a clean project structure and a working game loop so devel
 - Nametable loading
 - Sprite rendering
 - Timer system
-- Modular project layout
+- Modular project layout and compilation
 
 A simple demo is included where the player sprite can be moved with the D-pad.
 
 ![NES Demo](nesdemo.gif)
 
 Also check setup NES develop for GNU Linux [setup](https://www.whoop.ee/post/nes-development-on-linux.html).
+
+## Build and run
+
+Dependencies `cc65` and `make`.
+
+```
+make
+make run
+```
 
 ## Project Structure and Architecture
 

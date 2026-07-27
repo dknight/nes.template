@@ -1,4 +1,12 @@
 .include "player.inc"
+.include "../core/input.inc"
+.include "../gfx/sprites.inc"
+.include "../gfx/gfx.inc"
+
+.exportzp player_x
+.exportzp player_y
+.export player_update
+.export player_draw
 
 .segment "ZEROPAGE"
 player_x: .res 1
@@ -10,7 +18,6 @@ player_y: .res 1
 ; Update player position
 ;=================================================================
 .proc player_update
-
 	; Horizontal movement
 	LDA controller01_state
 	AND #(BUTTON_LEFT | BUTTON_RIGHT)

@@ -1,3 +1,11 @@
+.include "../core/ppu.inc"
+.include "../core/nmi.inc"
+
+.exportzp frame_ready
+.exportzp vblank_counter
+.export nmi
+.export irq
+
 ;=================================================================
 ; NMI related related memory reservation
 ;=================================================================
@@ -44,6 +52,5 @@ vblank_counter:     .res 1
 ;=================================================================
 ; IRQ Clock Interrupt Routine
 ;=================================================================
-.segment "CODE"
 irq:
 	RTI

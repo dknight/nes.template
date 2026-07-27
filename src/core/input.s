@@ -1,5 +1,8 @@
 .include "input.inc"
 
+.exportzp controller01_state
+.export input_poll
+
 .segment "ZEROPAGE"
 controller01_state: .res 1
 

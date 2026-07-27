@@ -2,5 +2,5 @@
 ; Import pattern CHR data (tiles)
 ;=================================================================
 .segment "TILES"
-.incbin  "./assets/patterns.chr"
+.incbin  "../../assets/patterns.chr"
 

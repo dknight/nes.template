@@ -1,5 +1,9 @@
 .include "ppu.inc"
 
+.export ppu_load_palette
+.export ppu_load_nametable
+.export ppu_load_attributes
+
 .segment "CODE"
 ;=================================================================
 ; Load palette into PPU

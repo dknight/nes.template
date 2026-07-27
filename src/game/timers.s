@@ -1,3 +1,9 @@
+.include "timers.inc"
+.include "game.inc"
+
+.export timers_update
+.export wait_frame
+
 .segment "CODE"
 
 ;=================================================================

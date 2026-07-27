@@ -1,3 +1,10 @@
+.include "ppu.inc"
+.include "apu.inc"
+.include "reset.inc"
+
+.import game_init
+.export reset
+
 .segment "CODE"
 
 ;=================================================================

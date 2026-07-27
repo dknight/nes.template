@@ -1,5 +1,7 @@
 .segment "RODATA"
 
+.export default_palette
+
 ;=================================================================
 ; Default palette table has 16 entries for backgrounds
 ; and 16 entries for sprites

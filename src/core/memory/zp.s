@@ -1,3 +1,8 @@
+.exportzp ptr_lo
+.exportzp ptr_hi
+.exportzp tmp00
+.exportzp tmp01
+
 .segment "ZEROPAGE"
 
 ;=================================================================

@@ -1,11 +1,17 @@
 .include "state.inc"
 
+.exportzp game_state
+.exportzp game_flags
+.export state_init
+.export state_set
+.export state_check
+.export state_set_flags
+.export state_clear_flags
+.export state_check_flags
+
 ;=================================================================
 ; Game state
 ;=================================================================
-.export game_state
-.export game_flags
-
 .segment "ZEROPAGE"
 game_state: .res 1
 game_flags: .res 1

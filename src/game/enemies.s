@@ -1,3 +1,6 @@
+.export enemies_update
+.export enemies_draw
+
 .segment "CODE"
 
 ;=================================================================

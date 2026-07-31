@@ -1,3 +1,4 @@
+.include "constants.inc"
 .include "player.inc"
 .include "../core/input.inc"
 .include "../gfx/sprites.inc"
@@ -7,6 +8,7 @@
 .exportzp player_y
 .export player_update
 .export player_draw
+.export player_init
 
 .segment "ZEROPAGE"
 player_x: .res 1
@@ -32,21 +34,40 @@ player_y: .res 1
 	JMP @vertical
 
 @move_left:
-	SEC
 	LDA player_x
+	CMP #(PLAYER_MIN_X + PLAYER_SPEED)
+	BCC @left_stop
+
+	SEC
 	SBC #PLAYER_SPEED
 	STA player_x
 	; Return here to disable diagonal movement, replace JMP to RTS
 	; RTS
 	JMP @vertical
 
+@left_stop:
+	LDA #PLAYER_MIN_X
+	STA player_x
+	; Return here to disable movement along the wall, replace JMP to RTS
+	; RTS
+	JMP @vertical
+
 @move_right:
-	CLC
 	LDA player_x
+	CMP #(PLAYER_MAX_X - PLAYER_SPEED)
+	BCS @right_stop
+
+	CLC
 	ADC #PLAYER_SPEED
 	STA player_x
 	; Return here to disable diagonal movement, replace JMP to RTS
 	; RTS
+	JMP @vertical
+
+@right_stop:
+	LDA #PLAYER_MAX_X
+	STA player_x
+	; Return here to disable movement along the wall, replace JMP to RTS
 	JMP @vertical
 
 ; Vertical movement
@@ -64,18 +85,35 @@ player_y: .res 1
 	RTS
 
 @move_up:
-	SEC
 	LDA player_y
+	CMP #(PLAYER_MIN_Y + PLAYER_SPEED)
+	BCC @up_stop
+
+	SEC
 	SBC #PLAYER_SPEED
 	STA player_y
 	RTS
 
+@up_stop:
+	LDA #PLAYER_MIN_Y
+	STA player_y
+	RTS
+
 @move_down:
-	CLC
 	LDA player_y
+	CMP #(PLAYER_MAX_Y - PLAYER_SPEED)
+	BCS @down_stop
+
+	CLC
 	ADC #PLAYER_SPEED
 	STA player_y
 	RTS
+
+@down_stop:
+	LDA #PLAYER_MAX_Y
+	STA player_y
+	RTS
+
 .endproc
 
 ;=================================================================
@@ -86,3 +124,12 @@ player_y: .res 1
 	RTS
 .endproc
 
+;=================================================================
+; Set initial player position
+;=================================================================
+.proc player_init
+	LDA #$50
+	STA player_x
+	LDA #$40
+	STA player_y
+.endproc

@@ -1,3 +1,4 @@
+.include "constants.inc"
 .include "game.inc"
 
 .exportzp game_timer
@@ -13,16 +14,11 @@ game_timer: .res 1
 ;=================================================================
 .proc game_init
 	JSR state_init
+	JSR player_init
 
 	; Init game timer
 	LDA #$08
 	STA game_timer
-
-	; Set player position
-	LDA #$50
-	STA player_x
-	LDA #$40
-	STA player_y
 
 	RTS
 .endproc

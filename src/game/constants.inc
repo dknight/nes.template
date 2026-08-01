@@ -15,9 +15,9 @@ GAME_BOTTOM_EDGE      = 231 ; might be 240-8 CRT TV overscan
 GAME_LEFT_EDGE        = 0   ; might be 0+4+4 CRT TV overscan
 GAME_TIMER_COUNT      = 8
 
-;==========================================================
+;=================================================================
 ; Define player constants and configurations
-;==========================================================
+;=================================================================
 PLAYER_SPEED          = 1
 PLAYER_WIDTH          = 8
 PLAYER_HEIGHT         = 8
@@ -25,3 +25,13 @@ PLAYER_MIN_X          = GAME_LEFT_EDGE
 PLAYER_MAX_X          = GAME_RIGHT_EDGE - PLAYER_WIDTH
 PLAYER_MIN_Y          = GAME_TOP_EDGE
 PLAYER_MAX_Y          = GAME_BOTTOM_EDGE - PLAYER_WIDTH
+
+;=================================================================
+; Collisions related constants
+;=================================================================
+TILE_FLOOR = 0
+TILE_WALL  = 1
+; TILE_LADDER = 2
+; TILE_WATER  = 3
+; TILE_SPIKES = 4
+; etc.

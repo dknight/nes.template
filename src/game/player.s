@@ -1,5 +1,6 @@
 .include "constants.inc"
 .include "player.inc"
+.include "collisions.inc"
 .include "../core/input.inc"
 .include "../gfx/sprites.inc"
 .include "../gfx/gfx.inc"
@@ -15,7 +16,6 @@ player_x: .res 1
 player_y: .res 1
 
 .segment "CODE"
-
 ;=================================================================
 ; Update player position
 ;=================================================================
@@ -29,6 +29,11 @@ player_y: .res 1
 	
 	CMP #BUTTON_RIGHT
 	BEQ @move_right
+
+	LDA player_x
+	LDY player_y
+	JSR collisions_is_wall
+	BCS @movement_blocked
 	
 	; none or both pressed
 	JMP @vertical
@@ -82,6 +87,9 @@ player_y: .res 1
 	BEQ @move_down
 	
 	; none or both pressed
+	RTS
+
+@movement_blocked:
 	RTS
 
 @move_up:

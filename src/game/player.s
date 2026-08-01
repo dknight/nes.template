@@ -19,109 +19,147 @@ player_y: .res 1
 ;=================================================================
 ; Update player position
 ;=================================================================
-.proc player_update
-	; Horizontal movement
+.if PLAYER_DIAGONAL_ENABLED
+	.proc player_update
+		JSR player_horizontal_movement
+		JSR player_vertical_movement
+		RTS
+	.endproc
+.else
+	.proc player_update
+		LDA controller01_state
+		AND #(BUTTON_LEFT | BUTTON_RIGHT)
+		BNE @horizontal
+
+		JSR player_vertical_movement
+		RTS
+
+	@horizontal:
+		JSR player_horizontal_movement
+		RTS
+	.endproc
+.endif
+
+;=================================================================
+; Move player horizontal movement
+;=================================================================
+.proc player_horizontal_movement
 	LDA controller01_state
 	AND #(BUTTON_LEFT | BUTTON_RIGHT)
-	
+
 	CMP #BUTTON_LEFT
-	BEQ @move_left
-	
+	BEQ @left
+
 	CMP #BUTTON_RIGHT
-	BEQ @move_right
+	BEQ @right
+	RTS
 
-	LDA player_x
-	LDY player_y
-	JSR collisions_is_wall
-	BCS @movement_blocked
-	
-	; none or both pressed
-	JMP @vertical
+@left:
+	JSR player_move_left
+	RTS
 
-@move_left:
+@right:
+	JSR player_move_right
+	RTS
+.endproc
+
+;=================================================================
+; Move player vertical movement
+;=================================================================
+.proc player_vertical_movement
+    LDA controller01_state
+    AND #(BUTTON_UP | BUTTON_DOWN)
+
+    CMP #BUTTON_UP
+    BEQ @up
+
+    CMP #BUTTON_DOWN
+    BEQ @down
+    RTS
+
+@up:
+    JSR player_move_up
+    RTS
+
+@down:
+    JSR player_move_down
+    RTS
+.endproc
+
+;=================================================================
+; Move player to left direction
+;=================================================================
+.proc player_move_left
 	LDA player_x
 	CMP #(PLAYER_MIN_X + PLAYER_SPEED)
-	BCC @left_stop
+	BCC @blocked
 
 	SEC
 	SBC #PLAYER_SPEED
 	STA player_x
-	; Return here to disable diagonal movement, replace JMP to RTS
-	; RTS
-	JMP @vertical
+	RTS
 
-@left_stop:
+@blocked:
 	LDA #PLAYER_MIN_X
 	STA player_x
-	; Return here to disable movement along the wall, replace JMP to RTS
-	; RTS
-	JMP @vertical
+	RTS
+.endproc
 
-@move_right:
+;=================================================================
+; Move player to right direction
+;=================================================================
+.proc player_move_right
 	LDA player_x
 	CMP #(PLAYER_MAX_X - PLAYER_SPEED)
-	BCS @right_stop
+	BCS @blocked
 
 	CLC
 	ADC #PLAYER_SPEED
 	STA player_x
-	; Return here to disable diagonal movement, replace JMP to RTS
-	; RTS
-	JMP @vertical
+	RTS
 
-@right_stop:
+@blocked:
 	LDA #PLAYER_MAX_X
 	STA player_x
-	; Return here to disable movement along the wall, replace JMP to RTS
-	JMP @vertical
-
-; Vertical movement
-@vertical:
-	LDA controller01_state
-	AND #(BUTTON_UP | BUTTON_DOWN)
-	
-	CMP #BUTTON_UP
-	BEQ @move_up
-	
-	CMP #BUTTON_DOWN
-	BEQ @move_down
-	
-	; none or both pressed
 	RTS
+.endproc
 
-@movement_blocked:
-	RTS
-
-@move_up:
+;=================================================================
+; Move player to up direction
+;=================================================================
+.proc player_move_up
 	LDA player_y
 	CMP #(PLAYER_MIN_Y + PLAYER_SPEED)
-	BCC @up_stop
+	BCC @blocked
 
 	SEC
 	SBC #PLAYER_SPEED
 	STA player_y
 	RTS
 
-@up_stop:
+@blocked:
 	LDA #PLAYER_MIN_Y
 	STA player_y
 	RTS
+.endproc
 
-@move_down:
+;=================================================================
+; Move player to bottom direction
+;=================================================================
+.proc player_move_down
 	LDA player_y
 	CMP #(PLAYER_MAX_Y - PLAYER_SPEED)
-	BCS @down_stop
+	BCS @blocked
 
 	CLC
 	ADC #PLAYER_SPEED
 	STA player_y
 	RTS
 
-@down_stop:
+@blocked:
 	LDA #PLAYER_MAX_Y
 	STA player_y
 	RTS
-
 .endproc
 
 ;=================================================================

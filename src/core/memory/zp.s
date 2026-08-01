@@ -12,6 +12,6 @@
 ptr_lo: .res 1
 ptr_hi: .res 1
 
-; Scratch (change variable when needed)
+; Scratch (change variables when needed)
 tmp00:  .res 1
 tmp01:  .res 1

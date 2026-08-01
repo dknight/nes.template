@@ -49,10 +49,10 @@ assets/               CHR graphics and other binary assets.
 
 Planned features:
 
+- Collision helpers (WIP)
 - PRG bank switching
 - Mapper support
 - Sound engine
-- Collision helpers
 - Animation system
 - Object pool utilities
 - Camera support

@@ -24,6 +24,8 @@ PLAYER_MAX_X            = GAME_RIGHT_EDGE - PLAYER_WIDTH
 PLAYER_MIN_Y            = GAME_TOP_EDGE
 PLAYER_MAX_Y            = GAME_BOTTOM_EDGE - PLAYER_WIDTH
 PLAYER_DIAGONAL_ENABLED = 1
+PLAYER_INIT_X           = $50
+PLAYER_INIT_Y           = $40
 
 ;=================================================================
 ; Collisions related constants

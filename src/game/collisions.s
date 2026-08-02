@@ -7,14 +7,13 @@
 .export collisions_get_tile
 .export collisions_load_level
 
-.importzp player_tile_x
+.importzp scratch00
 
 .segment "ZEROPAGE"
 collisions_ptr: .res 2
 collisions_row_ptr: .res 2
 
 .segment "RODATA"
-
 row_offset_lo:
 .byte   0,32,64,96,128,160,192,224
 .byte   0,32,64,96,128,160,192,224
@@ -28,7 +27,6 @@ row_offset_hi:
 .byte   3,3,3,3,3,3
 
 .segment "CODE"
-
 ;=================================================================
 ; Check wall at x, y. Player cannot move thourgh
 ; A = x_tile
@@ -61,11 +59,11 @@ row_offset_hi:
 ;   A = tile
 ;=============================================================
 .proc collisions_get_tile
-    STA player_tile_x          ; сохранить tile_x
+    STA scratch00
 
     JSR collisions_get_row_ptr
 
-    LDY player_tile_x          ; Y = tile_x
+    LDY scratch00
     LDA (collisions_row_ptr),Y
 
     RTS

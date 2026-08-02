@@ -141,12 +141,12 @@ player_tile_y:  .res 1
 	LSR
 	LSR
 	LSR                        ; y >> 3, if player height is 8px
-	TAY                        ; Y = tile_y
+	; TAY                        ; Y = tile_y
+	STA player_tile_y
 
-    ; Restore tile tile_x
+    ; Load tiles x to A, and y to Y and check collisions
 	LDA player_tile_x
-
-    ; Now check collitions
+	LDY player_tile_y
 	JSR collisions_is_wall
 	BCS @blocked
 

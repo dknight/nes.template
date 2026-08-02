@@ -27,11 +27,18 @@ row_offset_hi:
 .byte   3,3,3,3,3,3
 
 .segment "CODE"
-;=================================================================
-; Check wall at x, y. Player cannot move thourgh
-; A = x_tile
-; Y = y_tile
-;=================================================================
+;==========================================================================
+; Check whether tile is solid, player cannot pass
+;
+; Input:
+;   A = tile_x
+;   Y = tile_y
+;
+; Output:
+;   C = 1 if tile is solid
+;   C = 0 if tile is passable
+;
+;==========================================================================
 .proc collisions_is_wall
 	JSR collisions_get_tile
 
@@ -39,7 +46,7 @@ row_offset_hi:
 	BEQ @wall
 	; CMP #TILE_BRICK
 	; BEQ @wall
-	; CMP #TILE_METAL
+	; CMP #TILE_WATER
 	; BEQ @wall
 	; etc.
 
@@ -50,14 +57,19 @@ row_offset_hi:
 	RTS
 .endproc
 
-;=============================================================
+;==========================================================================
 ; Get tile at x, y
-; A = player_tile_x
-; Y = player_tile_y
 ;
-; Returns:
-;   A = tile
-;=============================================================
+; Input:
+;   A = tile_x
+;   Y = tile_y
+;
+; Output:
+;   A = tile id
+;
+; Clobbers:
+;   Y
+;==========================================================================
 .proc collisions_get_tile
     STA scratch00
 
@@ -69,9 +81,15 @@ row_offset_hi:
     RTS
 .endproc
 
-;=================================================================
+;==========================================================================
 ; Get row from collision map
-;=================================================================
+;
+; Input:
+;   Y = tile_y
+;
+; Output:
+;   collisions_row_ptr = collisions_ptr + tile_y*32
+;==========================================================================
 .proc collisions_get_row_ptr
     LDA collisions_ptr
     CLC
@@ -87,6 +105,9 @@ row_offset_hi:
 
 ;=================================================================
 ; Initialize collision pointer
+;
+; Output:
+;   collisions_ptr = &collisions_level_01
 ;=================================================================
 .proc collisions_load_level
     LDA #<collisions_level_01

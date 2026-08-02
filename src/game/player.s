@@ -1,6 +1,7 @@
 .include "constants.inc"
 .include "player.inc"
 .include "collisions.inc"
+.include "../include/macros.inc"
 .include "../core/input.inc"
 .include "../gfx/sprites.inc"
 .include "../gfx/gfx.inc"
@@ -75,6 +76,7 @@ player_tile_y:  .res 1
 ; Move player vertical movement
 ;=================================================================
 .proc player_vertical_movement
+	; 
     LDA controller01_state
     AND #(BUTTON_UP | BUTTON_DOWN)
 
@@ -128,26 +130,18 @@ player_tile_y:  .res 1
 	BCS @blocked
 
 	; Calculate tile_x of right player border
-	CLC
-	ADC #(PLAYER_WIDTH - 1)
-
-	LSR
-	LSR
-	LSR                        ; x >> 3, if player height is 8px
+	util_add_right_edge (PLAYER_WIDTH - 1)
 	STA player_tile_x          ; A = tile_x
 
-	; Calculatr tile_x of right player border
+	; Calculate tile_y of bottom player border
 	LDA player_y
-	LSR
-	LSR
-	LSR                        ; y >> 3, if player height is 8px
-	; TAY                        ; Y = tile_y
-	STA player_tile_y
+	util_add_bottom_edge (PLAYER_HEIGHT - 1)
+	STA player_tile_y          ; A = tile_y
 
-    ; Load tiles x to A, and y to Y and check collisions
+	; Check collision at (tile_x, tile_y)
 	LDA player_tile_x
 	LDY player_tile_y
-	JSR collisions_is_wall
+	JSR collisions_is_solid
 	BCS @blocked
 
     ; Movement is allowed

@@ -8,10 +8,10 @@
 ; byte 2 = attributes
 ; byte 3 = X position
 ;==========================================================
-OAM_Y     = $00
-OAM_TILE  = $01
-OAM_ATTR  = $02
-OAM_X     = $03
+OAM_Y      = $00
+OAM_TILE   = $01
+OAM_ATTR   = $02
+OAM_X      = $03
 
 ;==========================================================
 ; Attribute flags

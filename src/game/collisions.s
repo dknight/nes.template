@@ -3,7 +3,7 @@
 
 .exportzp collisions_ptr
 .exportzp collisions_row_ptr
-.export collisions_is_wall
+.export collisions_is_solid
 .export collisions_get_tile
 .export collisions_load_level
 
@@ -39,7 +39,7 @@ row_offset_hi:
 ;   C = 0 if tile is passable
 ;
 ;==========================================================================
-.proc collisions_is_wall
+.proc collisions_is_solid
 	JSR collisions_get_tile
 
 	CMP #TILE_WALL
@@ -81,6 +81,10 @@ row_offset_hi:
     RTS
 .endproc
 
+.proc collision_get_tile_right
+	; 
+.endproc
+
 ;==========================================================================
 ; Get row from collision map
 ;
@@ -118,3 +122,4 @@ row_offset_hi:
 
     RTS
 .endproc
+

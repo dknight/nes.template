@@ -7,12 +7,10 @@ GAME_STATE_GAMEPLAY     = 1
 GAME_STATE_PAUSE        = 2
 GAME_STATE_GAMEOVER     = 3
 GAME_STATE_CREDITS      = 4
-; 8 pixels from top because OAM Y is offset by 1
-GAME_TOP_EDGE           = 7   ; 0+8 CRT TV overscan
+GAME_TOP_EDGE           = 8   ; 0+8 CRT overscan
 GAME_RIGHT_EDGE         = 256 ; might be 256-4-4 CRT TV overscan
-; 232 pixels from top because OAM Y is offset by 1
-GAME_BOTTOM_EDGE        = 231 ; might be 240-8 CRT TV overscan
-GAME_LEFT_EDGE          = 0   ; might be 0+4+4 CRT TV overscan
+GAME_BOTTOM_EDGE        = 232 ; 240-16 CRT overscan
+GAME_LEFT_EDGE          = 0   ; 0+8 CRT overscan
 GAME_TIMER_COUNT        = 8
 
 ;=================================================================

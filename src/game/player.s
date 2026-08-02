@@ -7,13 +7,21 @@
 
 .exportzp player_x
 .exportzp player_y
+.exportzp player_next_x
+.exportzp player_tile_x
+.exportzp player_next_y
+.exportzp player_tile_y
 .export player_update
 .export player_draw
 .export player_init
 
 .segment "ZEROPAGE"
-player_x: .res 1
-player_y: .res 1
+player_x:       .res 1
+player_y:       .res 1
+player_next_x:  .res 1
+player_tile_x:  .res 1
+player_next_y:  .res 1
+player_tile_y:  .res 1
 
 .segment "CODE"
 ;=================================================================
@@ -109,19 +117,45 @@ player_y: .res 1
 ; Move player to right direction
 ;=================================================================
 .proc player_move_right
-	LDA player_x
-	CMP #(PLAYER_MAX_X - PLAYER_SPEED)
-	BCS @blocked
-
+	LDA player_x               ; next_x = player_x + PLAYER_SPEED
 	CLC
 	ADC #PLAYER_SPEED
+	STA player_next_x          ; Save next X-coordinate next_x
+
+	; Check screen max width, can be omitted if you use walls around
+	; the level.
+	CMP #PLAYER_MAX_X
+	BCS @blocked
+
+	; Calculate tile_x of right player border
+	CLC
+	ADC #(PLAYER_WIDTH - 1)
+
+	LSR
+	LSR
+	LSR                        ; x >> 3, if player height is 8px
+	STA player_tile_x          ; A = tile_x
+
+	; Calculatr tile_x of right player border
+	LDA player_y
+	LSR
+	LSR
+	LSR                        ; y >> 3, if player height is 8px
+	TAY                        ; Y = tile_y
+
+    ; Restore tile tile_x
+	LDA player_tile_x
+
+    ; Now check collitions
+	JSR collisions_is_wall
+	BCS @blocked
+
+    ; Movement is allowed
+	LDA player_next_x
 	STA player_x
-	RTS
 
 @blocked:
-	LDA #PLAYER_MAX_X
-	STA player_x
-	RTS
+    RTS
 .endproc
 
 ;=================================================================

@@ -98,28 +98,53 @@ player_tile_y:  .res 1
 
 ;==========================================================================
 ; Move player to left direction
+;
+; Clobbers:
+;  A
+;  Y
 ;==========================================================================
 .proc player_move_left
-	LDA player_x
+ LDA player_x
 	CMP #(PLAYER_MIN_X + PLAYER_SPEED)
 	BCC @blocked
 
 	SEC
 	SBC #PLAYER_SPEED
+	STA player_next_x
+
+	; Calculate tile_x of left player border
+	LDA player_next_x
+	util_pixel_to_tile
+	STA player_tile_x
+
+	; Calculate tile_y of bottom player border
+	LDA player_y
+	util_add_bottom_edge (PLAYER_HEIGHT - 1)
+	STA player_tile_y
+
+	; Check collision
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @blocked
+
+	; Movement is allowed
+	LDA player_next_x
 	STA player_x
-	RTS
 
 @blocked:
-	LDA #PLAYER_MIN_X
-	STA player_x
 	RTS
 .endproc
 
 ;==========================================================================
 ; Move player to right direction
+;
+; Clobbers:
+;  A
+;  Y
 ;==========================================================================
 .proc player_move_right
-	LDA player_x               ; next_x = player_x + PLAYER_SPEED
+	LDA player_x
 	CLC
 	ADC #PLAYER_SPEED
 	STA player_next_x          ; Save next X-coordinate next_x
@@ -154,6 +179,10 @@ player_tile_y:  .res 1
 
 ;==========================================================================
 ; Move player to up direction
+;
+; Clobbers:
+;  A
+;  Y
 ;==========================================================================
 .proc player_move_up
 	LDA player_y
@@ -162,31 +191,70 @@ player_tile_y:  .res 1
 
 	SEC
 	SBC #PLAYER_SPEED
+	STA player_next_y
+
+	; Calculate tile_x of left player border
+	LDA player_x
+	util_pixel_to_tile
+	STA player_tile_x
+
+	; Calculate tile_y of top player border
+	LDA player_next_y
+	util_pixel_to_tile
+	STA player_tile_y
+
+	; Check collision
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @blocked
+
+	; Movement is allowed
+	LDA player_next_y
 	STA player_y
-	RTS
 
 @blocked:
-	LDA #PLAYER_MIN_Y
-	STA player_y
 	RTS
 .endproc
 
 ;==========================================================================
 ; Move player to bottom direction
+;
+; Clobbers:
+;  A
+;  Y
 ;==========================================================================
 .proc player_move_down
 	LDA player_y
-	CMP #(PLAYER_MAX_Y - PLAYER_SPEED)
-	BCS @blocked
-
 	CLC
 	ADC #PLAYER_SPEED
+	STA player_next_y
+
+	; Check screen bottom boundary
+	CMP #PLAYER_MAX_Y
+	BCS @blocked
+
+	; Calculate tile_x of left player border
+	LDA player_x
+	util_pixel_to_tile
+	STA player_tile_x
+
+    ; Calculate tile_y of bottom player border
+    LDA player_next_y
+    util_add_bottom_edge (PLAYER_HEIGHT - 1)
+    STA player_tile_y
+
+	; Check collision at (tile_x, tile_y)
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @blocked
+
+	; Movement is allowed
+	LDA player_next_y
 	STA player_y
-	RTS
 
 @blocked:
-	LDA #PLAYER_MAX_Y
-	STA player_y
 	RTS
 .endproc
 

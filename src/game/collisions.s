@@ -1,5 +1,5 @@
 .include "constants.inc"
-.include "levels/maps.inc"
+.include "maps.inc"
 
 .exportzp collisions_ptr
 .exportzp collisions_row_ptr

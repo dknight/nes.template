@@ -5,7 +5,14 @@
 .segment "CODE"
 
 ;==========================================================================
-; Game one tick
+; Input:
+;   None
+;
+; Output:
+;   All game systems updated for one game tick.
+;
+; Clobbers:
+;   A, X, Y
 ;==========================================================================
 .proc game_tick
     JSR player_update

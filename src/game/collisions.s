@@ -27,6 +27,7 @@ row_offset_hi:
 .byte   3,3,3,3,3,3
 
 .segment "CODE"
+
 ;==========================================================================
 ; Check whether the tile is solid.
 ;

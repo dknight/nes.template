@@ -9,9 +9,6 @@
 .export state_clear_flags
 .export state_check_flags
 
-;==========================================================================
-; Game state
-;==========================================================================
 .segment "ZEROPAGE"
 
 game_state: .res 1

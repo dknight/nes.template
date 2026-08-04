@@ -262,7 +262,7 @@ player_tile_y:  .res 1
 ; Draw player
 ;==========================================================================
 .proc player_draw
-	sprite_draw $00, player_y, $04, OAM_PAL0, player_x
+	sprite_draw $00, player_y, $42, OAM_PAL0, player_x
 	RTS
 .endproc
 

@@ -1,4 +1,4 @@
-.include "ppu.inc"
+.include "constants.inc"
 .include "apu.inc"
 .include "reset.inc"
 
@@ -51,7 +51,7 @@ wait_vblank2:
 	BPL wait_vblank2
 	
 	JSR ppu_load_palette
-	JSR ppu_load_nametable
+	; JSR ppu_load_nametable
 	JSR ppu_load_attributes
 	JSR sprite_clear_oam
 

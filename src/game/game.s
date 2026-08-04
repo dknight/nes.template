@@ -1,6 +1,7 @@
 .include "constants.inc"
 .include "game.inc"
 .include "collisions.inc"
+.include "level.inc"
 
 .exportzp game_timer
 .export game_init
@@ -15,6 +16,7 @@ game_timer: .res 1
 ;==========================================================================
 .proc game_init
 	JSR collisions_load_level
+	JSR level_load
 	JSR state_init
 	JSR player_init
 

@@ -1,3 +1,4 @@
+.include "constants.inc"
 .include "apu.inc"
 
 .segment "CODE"

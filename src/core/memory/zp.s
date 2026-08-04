@@ -7,6 +7,7 @@
 .exportzp ptr_hi
 .exportzp scratch00
 .exportzp scratch01
+.exportzp page_count
 
 ; Generic pointers
 ptr_lo:     .res 1
@@ -15,3 +16,7 @@ ptr_hi:     .res 1
 ; Scratch (change variables when needed)
 scratch00:  .res 1
 scratch01:  .res 1
+
+; Loading level vars
+page_count: .res 1
+

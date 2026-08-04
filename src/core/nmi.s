@@ -1,3 +1,4 @@
+.include "../core/constants.inc"
 .include "../core/ppu.inc"
 .include "../core/nmi.inc"
 

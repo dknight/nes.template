@@ -1,5 +1,5 @@
 .include "constants.inc"
-.include "collisions_level_01.inc"
+.include "levels/maps.inc"
 
 .exportzp collisions_ptr
 .exportzp collisions_row_ptr
@@ -111,13 +111,13 @@ row_offset_hi:
 ; Initialize collision pointer
 ;
 ; Output:
-;   collisions_ptr = &collisions_level_01
+;   collisions_ptr = &level_map_01
 ;==========================================================================
 .proc collisions_load_level
-    LDA #<collisions_level_01
+    LDA #<level_map_01
     STA collisions_ptr
 
-    LDA #>collisions_level_01
+    LDA #>level_map_01
     STA collisions_ptr+1
 
     RTS

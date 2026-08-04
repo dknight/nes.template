@@ -28,21 +28,25 @@ row_offset_hi:
 
 .segment "CODE"
 ;==========================================================================
-; Check whether tile is solid, player cannot pass
+; Check whether the tile is solid.
 ;
 ; Input:
-;   A = tile_x
-;   Y = tile_y
+;   A = tile_x (0..31)
+;   Y = tile_y (0..29)
 ;
 ; Output:
-;   C = 1 if tile is solid
-;   C = 0 if tile is passable
+;   C = 1 if the tile is solid.
+;   C = 0 if the tile is passable.
 ;
+; Clobbers:
+;   A
 ;==========================================================================
 .proc collisions_is_solid
 	JSR collisions_get_tile
 
 	CMP #TILE_WALL
+	BEQ @wall
+	CMP #TILE_NOT_USED
 	BEQ @wall
 	; CMP #TILE_BRICK
 	; BEQ @wall
@@ -58,17 +62,20 @@ row_offset_hi:
 .endproc
 
 ;==========================================================================
-; Get tile at x, y
+; Get logical tile ID at tile coordinates.
 ;
 ; Input:
-;   A = tile_x
-;   Y = tile_y
+;   A = tile_x (0..31)
+;   Y = tile_y (0..29)
 ;
 ; Output:
-;   A = tile id
+;   A = logical tile ID
 ;
 ; Clobbers:
 ;   Y
+;
+; Uses:
+;   scratch00
 ;==========================================================================
 .proc collisions_get_tile
     STA scratch00
@@ -86,13 +93,16 @@ row_offset_hi:
 .endproc
 
 ;==========================================================================
-; Get row from collision map
+; Calculate pointer to the specified tile row.
 ;
 ; Input:
 ;   Y = tile_y
 ;
 ; Output:
-;   collisions_row_ptr = collisions_ptr + tile_y*32
+;   collisions_row_ptr = collisions_ptr + tile_y * 32
+;
+; Clobbers:
+;   A
 ;==========================================================================
 .proc collisions_get_row_ptr
     LDA collisions_ptr
@@ -108,10 +118,16 @@ row_offset_hi:
 .endproc
 
 ;==========================================================================
-; Initialize collision pointer
+; Initialize collision map pointer.
+;
+; Input:
+;   None
 ;
 ; Output:
-;   collisions_ptr = &level_map_01
+;   collisions_ptr points to the current level map.
+;
+; Clobbers:
+;   A
 ;==========================================================================
 .proc collisions_load_level
     LDA #<level_map_01

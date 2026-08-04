@@ -14,11 +14,11 @@
 .import input_poll
 .import reset
 
+.segment "CODE"
+
 ;==========================================================================
 ; Main application logic section includes the game loop
 ;==========================================================================
-.segment "CODE"
-
 .proc main
 @loop:
 	JSR wait_frame

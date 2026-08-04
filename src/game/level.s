@@ -13,19 +13,16 @@
 .import nametable
 
 ;==========================================================================
-; Load level into VRAM
+; Load current level into VRAM.
 ;
-; Loads the current level map into the first nametable.
-; Each logical tile ID is translated into a CHR tile index through the
-; tile_to_chr lookup table before being written to PPU_DATA.
+; Converts logical tile IDs from the level map into CHR tile indices using
+; tile_to_chr and writes the resulting nametable to VRAM ($2000-$23BF).
 ;
-; VRAM destination:
-;   $2000-$23BF (960 bytes)
+; Input:
+;   None
 ;
-; Requirements:
-;   - Rendering must be disabled or the PPU must be in VBlank.
-;   - level_map_01 contains 960 logical tiles.
-;   - tile_to_chr contains the tile translation table.
+; Output:
+;   Nametable written to VRAM.
 ;
 ; Clobbers:
 ;   A, X, Y
@@ -34,6 +31,10 @@
 ;   ptr_lo
 ;   ptr_hi
 ;   page_count
+;
+; Requirements:
+;   - Rendering disabled or PPU in VBlank.
+;   - level_map_01 contains exactly 960 tiles.
 ;==========================================================================
 .proc level_load
     ; Reset PPU latch

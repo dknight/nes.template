@@ -13,12 +13,20 @@
 ; Game state
 ;==========================================================================
 .segment "ZEROPAGE"
+
 game_state: .res 1
 game_flags: .res 1
 
 .segment "CODE"
 ;==========================================================================
-; Init game state
+; Initialize game state.
+;
+; Input:
+;   None
+;
+; Output:
+;   game_state = STATE_TITLE
+;   game_flags = $00
 ;
 ; Clobbers:
 ;   A
@@ -34,10 +42,16 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Set game state
+; Set current game state.
 ;
 ; Input:
-;   A = new state
+;   A = new game state
+;
+; Output:
+;   game_state updated.
+;
+; Clobbers:
+;   A
 ;==========================================================================
 .proc state_set
 	STA game_state
@@ -45,14 +59,17 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Check game state
+; Compare current game state.
 ;
 ; Input:
-;   A = state to compare
+;   A = game state to compare
 ;
 ; Output:
-;   Z = 1 if equal
-;   Z = 0 otherwise
+;   Z = 1 if states are equal.
+;   Z = 0 otherwise.
+;
+; Clobbers:
+;   P (status flags)
 ;==========================================================================
 .proc state_check
 	CMP game_state
@@ -60,10 +77,16 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Set game flags
+; Set game flags.
 ;
 ; Input:
 ;   A = flag mask
+;
+; Output:
+;   Specified flags set in game_flags.
+;
+; Clobbers:
+;   A
 ;==========================================================================
 .proc state_set_flags
 	ORA game_flags
@@ -72,9 +95,16 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Clear game flags
+; Clear game flags.
+;
 ; Input:
 ;   A = flag mask
+;
+; Output:
+;   Specified flags cleared in game_flags.
+;
+; Clobbers:
+;   A
 ;==========================================================================
 .proc state_clear_flags
 	EOR #$FF
@@ -84,13 +114,14 @@ game_flags: .res 1
 .endproc
 
 ;==========================================================================
-; Check game flags
+; Check game flags.
+;
 ; Input:
 ;   A = flag mask
 ;
 ; Output:
-;   Z = 1 if no flags match
-;   Z = 0 if any flag matches
+;   Z = 1 if none of the specified flags are set.
+;   Z = 0 if any specified flag is set.
 ;==========================================================================
 .proc state_check_flags
 	AND game_flags

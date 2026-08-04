@@ -17,6 +17,7 @@
 .export player_init
 
 .segment "ZEROPAGE"
+
 player_x:       .res 1
 player_y:       .res 1
 player_next_x:  .res 1
@@ -25,8 +26,20 @@ player_next_y:  .res 1
 player_tile_y:  .res 1
 
 .segment "CODE"
+
 ;==========================================================================
-; Update player position
+; Update player position.
+;
+; Processes controller input and updates the player's position.
+;
+; Input:
+;   controller01_state
+;
+; Output:
+;   player_x and/or player_y may be updated.
+;
+; Clobbers:
+;   A, X, Y
 ;==========================================================================
 .if PLAYER_DIAGONAL_ENABLED
 	.proc player_update
@@ -50,7 +63,16 @@ player_tile_y:  .res 1
 .endif
 
 ;==========================================================================
-; Move player horizontal movement
+; Process horizontal player movement.
+;
+; Input:
+;   controller01_state
+;
+; Output:
+;   player_x may be updated.
+;
+; Clobbers:
+;   A, Y
 ;==========================================================================
 .proc player_horizontal_movement
 	LDA controller01_state
@@ -73,7 +95,16 @@ player_tile_y:  .res 1
 .endproc
 
 ;==========================================================================
-; Move player vertical movement
+; Process vertical player movement.
+;
+; Input:
+;   controller01_state
+;
+; Output:
+;   player_y may be updated.
+;
+; Clobbers:
+;   A, Y
 ;==========================================================================
 .proc player_vertical_movement
 	; 
@@ -97,11 +128,17 @@ player_tile_y:  .res 1
 .endproc
 
 ;==========================================================================
-; Move player to left direction
+; Move player left by PLAYER_SPEED if movement is allowed.
+;
+; Input:
+;   player_x (pixels)
+;   player_y (pixels)
+;
+; Output:
+;   player_x updated if no collision is detected.
 ;
 ; Clobbers:
-;  A
-;  Y
+;   A, Y
 ;==========================================================================
 .proc player_move_left
  LDA player_x
@@ -137,11 +174,17 @@ player_tile_y:  .res 1
 .endproc
 
 ;==========================================================================
-; Move player to right direction
+; Move player right by PLAYER_SPEED if movement is allowed.
+;
+; Input:
+;   player_x
+;   player_y
+;
+; Output:
+;   player_x updated if no collision is detected.
 ;
 ; Clobbers:
-;  A
-;  Y
+;   A, Y
 ;==========================================================================
 .proc player_move_right
 	LDA player_x
@@ -178,11 +221,17 @@ player_tile_y:  .res 1
 .endproc
 
 ;==========================================================================
-; Move player to up direction
+; Move player up by PLAYER_SPEED if movement is allowed.
+;
+; Input:
+;   player_x
+;   player_y
+;
+; Output:
+;   player_y updated if no collision is detected.
 ;
 ; Clobbers:
-;  A
-;  Y
+;   A, Y
 ;==========================================================================
 .proc player_move_up
 	LDA player_y
@@ -218,11 +267,17 @@ player_tile_y:  .res 1
 .endproc
 
 ;==========================================================================
-; Move player to bottom direction
+; Move player down by PLAYER_SPEED if movement is allowed.
+;
+; Input:
+;   player_x
+;   player_y
+;
+; Output:
+;   player_y updated if no collision is detected.
 ;
 ; Clobbers:
-;  A
-;  Y
+;   A, Y
 ;==========================================================================
 .proc player_move_down
 	LDA player_y
@@ -259,18 +314,36 @@ player_tile_y:  .res 1
 .endproc
 
 ;==========================================================================
-; Draw player
+; Draw player sprite.
+;
+; Input:
+;   player_x
+;   player_y
+;
+; Output:
+;   Player sprite written to OAM.
+;
+; Clobbers:
+;   A
 ;==========================================================================
 .proc player_draw
+	; TODO $42 currently hardcoded player sprite
 	sprite_draw $00, player_y, $42, OAM_PAL0, player_x
 	RTS
 .endproc
 
 ;==========================================================================
-; Set initial player position
+; Initialize player position.
+;
+; Input:
+;   None
+;
+; Output:
+;   player_x = PLAYER_INIT_X
+;   player_y = PLAYER_INIT_Y
 ;
 ; Clobbers:
-;  A
+;   A
 ;==========================================================================
 .proc player_init
 	LDA #PLAYER_INIT_X

@@ -9,10 +9,18 @@ controller01_state: .res 1
 .segment "CODE"
 
 ;==========================================================================
-; Read controllers
+; Read controller state.
+;
+; Reads the current button states from controller port 1.
+;
+; Input:
+;   None
+;
+; Output:
+;   controller01_state contains the current button states.
 ;
 ; Clobbers:
-;   A
+;   A, X
 ;==========================================================================
 .proc input_poll
 	LDA #$01

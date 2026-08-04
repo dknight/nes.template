@@ -12,7 +12,16 @@ game_timer: .res 1
 .segment "CODE"
 
 ;==========================================================================
-; Init game data
+; Initialize game state.
+;
+; Input:
+;   None
+;
+; Output:
+;   Game systems initialized and the first level loaded.
+;
+; Clobbers:
+;   A, X, Y
 ;==========================================================================
 .proc game_init
 	JSR collisions_load_level

@@ -89,10 +89,6 @@ row_offset_hi:
     RTS
 .endproc
 
-.proc collision_get_tile_right
-	; 
-.endproc
-
 ;==========================================================================
 ; Calculate pointer to the specified tile row.
 ;

@@ -107,7 +107,6 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_vertical_movement
-	; 
     LDA controller01_state
     AND #(BUTTON_UP | BUTTON_DOWN)
 
@@ -141,25 +140,36 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_move_left
- LDA player_x
+    ; Check screen boundary
+	LDA player_x
 	CMP #(PLAYER_MIN_X + PLAYER_SPEED)
 	BCC @blocked
 
+	; Calculate next position
 	SEC
 	SBC #PLAYER_SPEED
 	STA player_next_x
 
-	; Calculate tile_x of left player border
+	; Left edge X
 	LDA player_next_x
-	util_pixel_to_tile
+	macro_pixel_to_tile
 	STA player_tile_x
 
-	; Calculate tile_y of bottom player border
+	; Bottom corner
 	LDA player_y
-	util_add_bottom_edge (PLAYER_HEIGHT - 1)
+	player_add_bottom_edge (PLAYER_HEIGHT - 1)
 	STA player_tile_y
 
-	; Check collision
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @blocked
+
+    ; Top corner
+	LDA player_y
+	macro_pixel_to_tile
+	STA player_tile_y
+
 	LDA player_tile_x
 	LDY player_tile_y
 	JSR collisions_is_solid
@@ -187,26 +197,35 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_move_right
+    ; Calculate next position
 	LDA player_x
 	CLC
 	ADC #PLAYER_SPEED
-	STA player_next_x          ; Save next X-coordinate next_x
+	STA player_next_x
 
-	; Check screen max width, can be omitted if you use walls around
-	; the level.
+	; Check screen boundary
 	CMP #PLAYER_MAX_X
 	BCS @blocked
 
-	; Calculate tile_x of right player border
-	util_add_right_edge (PLAYER_WIDTH - 1)
-	STA player_tile_x          ; A = tile_x
+    ; Right edge X
+	player_add_right_edge (PLAYER_WIDTH - 1)
+	STA player_tile_x
 
-	; Calculate tile_y of bottom player border
+	; Bottom corner
 	LDA player_y
-	util_add_bottom_edge (PLAYER_HEIGHT - 1)
-	STA player_tile_y          ; A = tile_y
+	player_add_bottom_edge (PLAYER_HEIGHT - 1)
+	STA player_tile_y
 
-	; Check collision at (tile_x, tile_y)
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @blocked
+
+    ; Top corner
+	LDA player_y
+	macro_pixel_to_tile
+	STA player_tile_y
+
 	LDA player_tile_x
 	LDY player_tile_y
 	JSR collisions_is_solid
@@ -234,25 +253,36 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_move_up
+	; Check screen boundary
 	LDA player_y
 	CMP #(PLAYER_MIN_Y + PLAYER_SPEED)
 	BCC @blocked
 
+	; Calculate next position
 	SEC
 	SBC #PLAYER_SPEED
 	STA player_next_y
 
-	; Calculate tile_x of left player border
+	; Left edge X
 	LDA player_x
-	util_pixel_to_tile
+	macro_pixel_to_tile
 	STA player_tile_x
 
-	; Calculate tile_y of top player border
+	; Left edge
 	LDA player_next_y
-	util_pixel_to_tile
+	macro_pixel_to_tile
 	STA player_tile_y
 
-	; Check collision
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @blocked
+	
+	; Right edge
+	LDA player_x
+	player_add_right_edge (PLAYER_WIDTH -1)
+	STA player_tile_x
+
 	LDA player_tile_x
 	LDY player_tile_y
 	JSR collisions_is_solid
@@ -280,26 +310,35 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_move_down
+	; Calculate next position
 	LDA player_y
 	CLC
 	ADC #PLAYER_SPEED
 	STA player_next_y
 
-	; Check screen bottom boundary
+	; Check screen boundary
 	CMP #PLAYER_MAX_Y
 	BCS @blocked
 
-	; Calculate tile_x of left player border
+    ; Left edge
 	LDA player_x
-	util_pixel_to_tile
+	macro_pixel_to_tile
 	STA player_tile_x
 
-    ; Calculate tile_y of bottom player border
     LDA player_next_y
-    util_add_bottom_edge (PLAYER_HEIGHT - 1)
+    player_add_bottom_edge (PLAYER_HEIGHT - 1)
     STA player_tile_y
 
-	; Check collision at (tile_x, tile_y)
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @blocked
+
+	; Right edge
+	LDA player_x
+	player_add_right_edge (PLAYER_WIDTH -1)
+	STA player_tile_x
+
 	LDA player_tile_x
 	LDY player_tile_y
 	JSR collisions_is_solid

@@ -150,7 +150,7 @@ player_tile_y:  .res 1
 	SBC #PLAYER_SPEED
 	STA player_next_x
 
-	; Left edge X
+	; Left edge
 	LDA player_next_x
 	macro_pixel_to_tile
 	STA player_tile_x
@@ -175,7 +175,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-	; Movement is allowed
+	; Apply movement
 	LDA player_next_x
 	STA player_x
 
@@ -187,8 +187,8 @@ player_tile_y:  .res 1
 ; Move player right by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
-;   player_x
-;   player_y
+;   player_x (pixels)
+;   player_y (pixels)
 ;
 ; Output:
 ;   player_x updated if no collision is detected.
@@ -207,7 +207,7 @@ player_tile_y:  .res 1
 	CMP #PLAYER_MAX_X
 	BCS @blocked
 
-    ; Right edge X
+    ; Right edge
 	player_add_right_edge (PLAYER_WIDTH - 1)
 	STA player_tile_x
 
@@ -231,7 +231,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-    ; Movement is allowed
+	; Apply movement
 	LDA player_next_x
 	STA player_x
 
@@ -243,8 +243,8 @@ player_tile_y:  .res 1
 ; Move player up by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
-;   player_x
-;   player_y
+;   player_x (pixels)
+;   player_y (pixels)
 ;
 ; Output:
 ;   player_y updated if no collision is detected.
@@ -263,12 +263,12 @@ player_tile_y:  .res 1
 	SBC #PLAYER_SPEED
 	STA player_next_y
 
-	; Left edge X
+	; Left edge
 	LDA player_x
 	macro_pixel_to_tile
 	STA player_tile_x
 
-	; Left edge
+	; Top edge
 	LDA player_next_y
 	macro_pixel_to_tile
 	STA player_tile_y
@@ -288,7 +288,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-	; Movement is allowed
+    ; Apply movement
 	LDA player_next_y
 	STA player_y
 
@@ -300,8 +300,8 @@ player_tile_y:  .res 1
 ; Move player down by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
-;   player_x
-;   player_y
+;   player_x (pixels)
+;   player_y (pixels)
 ;
 ; Output:
 ;   player_y updated if no collision is detected.
@@ -325,6 +325,7 @@ player_tile_y:  .res 1
 	macro_pixel_to_tile
 	STA player_tile_x
 
+	; Bottom edge
     LDA player_next_y
     player_add_bottom_edge (PLAYER_HEIGHT - 1)
     STA player_tile_y
@@ -344,7 +345,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-	; Movement is allowed
+    ; Apply movement
 	LDA player_next_y
 	STA player_y
 
@@ -356,8 +357,8 @@ player_tile_y:  .res 1
 ; Draw player sprite.
 ;
 ; Input:
-;   player_x
-;   player_y
+;   player_x (pixels)
+;   player_y (pixels)
 ;
 ; Output:
 ;   Player sprite written to OAM.

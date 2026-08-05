@@ -15,6 +15,7 @@ The template provides a clean project structure and a working game loop so devel
 - Sprite rendering
 - Timer system
 - Modular project layout and compilation
+- Collision helpers
 
 A simple demo is included where the player sprite can be moved with the D-pad.
 
@@ -49,7 +50,6 @@ assets/               CHR graphics and other binary assets.
 
 Planned features:
 
-- Collision helpers (WIP)
 - PRG bank switching
 - Mapper support
 - Sound engine

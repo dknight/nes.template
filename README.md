@@ -27,10 +27,13 @@ Also check setup NES develop for GNU Linux [setup](https://www.whoop.ee/post/nes
 
 Dependencies `cc65` and `make`.
 
+Build, just:
+
 ```
 make
-make run
 ```
+
+Builds are saved in the `builds/` directory.
 
 ## Project Structure and Architecture
 

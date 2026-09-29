@@ -5,18 +5,16 @@
 
 ;==========================================================================
 ; Update enemies
-; TODO
 ;==========================================================================
 .proc enemies_update
-	; Implement if needed
+	; TODO implement
 	RTS
 .endproc
 
 ;==========================================================================
 ; Draw enemies
-; TODO
 ;==========================================================================
 .proc enemies_draw
-	; Implement if needed
+	; TODO implement
 	RTS
 .endproc

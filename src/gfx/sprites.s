@@ -6,8 +6,16 @@
 .export oam_end
 
 .segment "CODE"
+
 ;==========================================================================
-; Clear OAM segment
+; Input:
+;   None
+;
+; Output:
+;   Clear OAM segment
+;
+; Clobbers:
+;   A,X
 ;==========================================================================
 .proc sprite_clear_oam
 	LDA #$FF
@@ -27,7 +35,14 @@ clear_loop:
 .endproc
 
 ;==========================================================================
-; Begin OAM segment
+; Input:
+;   None
+;
+; Output:
+;   Begin OAM segment
+;
+; Clobbers:
+;   X
 ;==========================================================================
 .proc oam_begin
     LDX #$00
@@ -36,7 +51,14 @@ clear_loop:
 .endproc
 
 ;==========================================================================
-; End OAM segment
+; Input:
+;   None
+;
+; Output:
+;   End OAM segment
+;
+; Clobbers:
+;   None
 ;==========================================================================
 .proc oam_end
     JSR dma_transfer

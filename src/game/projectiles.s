@@ -5,14 +5,13 @@
 
 ;==========================================================================
 ; Projectiles related code
-; TODO
 ;==========================================================================
 .proc projectiles_update
-	; Implement if needed
+	; TODO implement
 	RTS
 .endproc
 
 .proc projectiles_draw
-	; Implement if needed
+	; TODO implement
 	RTS
 .endproc

@@ -4,9 +4,8 @@
 
 ;==========================================================================
 ; Camera related code
-; TODO
 ;==========================================================================
 .proc camera_update
-	; Implement if needed
+	; TODO implement
 	RTS
 .endproc

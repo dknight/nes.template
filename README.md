@@ -12,7 +12,7 @@ The template provides a clean project structure and a working game loop so devel
 - OAM DMA
 - Palette loading
 - Nametable loading
-- Sprite rendering
+- Sprites and metasprites rendering
 - Timer system
 - Modular project layout and compilation
 - Collision helpers

@@ -21,3 +21,4 @@
     JSR camera_update
     RTS
 .endproc
+

@@ -9,5 +9,6 @@
 
 attribute_table:
 	.repeat 64
-	.byte $00
+		.byte $00
 	.endrepeat
+

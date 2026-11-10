@@ -6,6 +6,10 @@
 .include "../gfx/sprites.inc"
 .include "../gfx/gfx.inc"
 
+.import sprite_draw_meta
+.importzp ptr_lo
+.importzp ptr_hi
+
 .exportzp player_x
 .exportzp player_y
 .exportzp player_next_x
@@ -18,12 +22,27 @@
 
 .segment "ZEROPAGE"
 
-player_x:       .res 1
-player_y:       .res 1
+player_x:	   .res 1
+player_y:	   .res 1
 player_next_x:  .res 1
 player_tile_x:  .res 1
 player_next_y:  .res 1
 player_tile_y:  .res 1
+
+.segment "RODATA"
+
+;==========================================================================
+; Player metasprite (16x16).
+;
+; Each entry follows the standard NES OAM format:
+;   Y, TILE, ATTR, X
+;==========================================================================
+player_metasprite:
+    ; Y, TILE, ATTR, X
+    .byte 0, $40, OAM_PAL0, 0
+    .byte 0, $41, OAM_PAL0, 8
+    .byte 8, $50, OAM_PAL0, 0
+    .byte 8, $51, OAM_PAL0, 8
 
 .segment "CODE"
 
@@ -107,23 +126,23 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_vertical_movement
-    LDA controller01_state
-    AND #(BUTTON_UP | BUTTON_DOWN)
+	LDA controller01_state
+	AND #(BUTTON_UP | BUTTON_DOWN)
 
-    CMP #BUTTON_UP
-    BEQ @up
+	CMP #BUTTON_UP
+	BEQ @up
 
-    CMP #BUTTON_DOWN
-    BEQ @down
-    RTS
+	CMP #BUTTON_DOWN
+	BEQ @down
+	RTS
 
 @up:
-    JSR player_move_up
-    RTS
+	JSR player_move_up
+	RTS
 
 @down:
-    JSR player_move_down
-    RTS
+	JSR player_move_down
+	RTS
 .endproc
 
 ;==========================================================================
@@ -140,7 +159,7 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_move_left
-    ; Check screen boundary
+	; Check screen boundary
 	LDA player_x
 	CMP #(PLAYER_MIN_X + PLAYER_SPEED)
 	BCC @blocked
@@ -165,7 +184,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-    ; Top corner
+	; Top corner
 	LDA player_y
 	macro_pixel_to_tile
 	STA player_tile_y
@@ -197,7 +216,7 @@ player_tile_y:  .res 1
 ;   A, Y
 ;==========================================================================
 .proc player_move_right
-    ; Calculate next position
+	; Calculate next position
 	LDA player_x
 	CLC
 	ADC #PLAYER_SPEED
@@ -207,7 +226,7 @@ player_tile_y:  .res 1
 	CMP #PLAYER_MAX_X
 	BCS @blocked
 
-    ; Right edge
+	; Right edge
 	player_add_right_edge (PLAYER_WIDTH - 1)
 	STA player_tile_x
 
@@ -221,7 +240,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-    ; Top corner
+	; Top corner
 	LDA player_y
 	macro_pixel_to_tile
 	STA player_tile_y
@@ -236,7 +255,7 @@ player_tile_y:  .res 1
 	STA player_x
 
 @blocked:
-    RTS
+	RTS
 .endproc
 
 ;==========================================================================
@@ -288,7 +307,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-    ; Apply movement
+	; Apply movement
 	LDA player_next_y
 	STA player_y
 
@@ -320,15 +339,15 @@ player_tile_y:  .res 1
 	CMP #PLAYER_MAX_Y
 	BCS @blocked
 
-    ; Left edge
+	; Left edge
 	LDA player_x
 	macro_pixel_to_tile
 	STA player_tile_x
 
 	; Bottom edge
-    LDA player_next_y
-    player_add_bottom_edge (PLAYER_HEIGHT - 1)
-    STA player_tile_y
+	LDA player_next_y
+	player_add_bottom_edge (PLAYER_HEIGHT - 1)
+	STA player_tile_y
 
 	LDA player_tile_x
 	LDY player_tile_y
@@ -345,7 +364,7 @@ player_tile_y:  .res 1
 	JSR collisions_is_solid
 	BCS @blocked
 
-    ; Apply movement
+	; Apply movement
 	LDA player_next_y
 	STA player_y
 
@@ -367,8 +386,19 @@ player_tile_y:  .res 1
 ;   A
 ;==========================================================================
 .proc player_draw
-	; TODO $42 currently hardcoded player sprite
-	sprite_draw $00, player_y, $42, OAM_PAL0, player_x
+	; Load metasprite pointer.
+	LDA #<player_metasprite
+	STA ptr_lo
+
+	LDA #>player_metasprite
+	STA ptr_hi
+
+	; Pass player coordinates.
+	LDA player_x
+	LDX player_y
+
+	JSR sprite_draw_meta
+
 	RTS
 .endproc
 

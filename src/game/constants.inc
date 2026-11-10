@@ -13,6 +13,11 @@ GAME_BOTTOM_EDGE        = 232 ; 240-16 CRT overscan
 GAME_LEFT_EDGE          = 0   ; 0+8 CRT overscan
 GAME_TIMER_COUNT        = 8
 
+; Game flags in bits might be useful
+GAME_FLAG_PAUSED        = %00000001
+GAME_FLAG_FADE          = %00000010
+GAME_FLAG_DEBUG         = %00000100
+
 ;==========================================================================
 ; Define player constants and configurations
 ;==========================================================================

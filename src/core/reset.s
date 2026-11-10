@@ -13,7 +13,7 @@
 .proc reset
 	SEI						; mask interrupts
 	LDA #$00
-	STA PPU_CONTROL			; disable NMI
+	STA PPU_CTRL			; disable NMI
 	STA PPU_MASK			; disable rendering
 	STA APU_DM_CONTROL		; disable DMC IRQ
 	LDA #$40
@@ -87,7 +87,7 @@ wait_vblank2:
 	;||+------- sprite size
 	;|+-------- PPU master/slave
 	;+--------- enable NMI
-	STA PPU_CONTROL
+	STA PPU_CTRL
 	
 	JMP main
 .endproc

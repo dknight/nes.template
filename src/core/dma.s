@@ -16,10 +16,10 @@
 ;==========================================================================
 .proc dma_transfer
 	LDA #$00
-	STA PPU_SPRRAM_ADDRESS
+	STA PPU_OAM_ADDR
 
 	LDA #>oam
-	STA SPRITE_DMA
+	STA OAM_DMA
 	RTS
 .endproc
 

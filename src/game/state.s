@@ -1,4 +1,4 @@
-.include "state.inc"
+.include "constants.inc"
 
 .exportzp game_state
 .exportzp game_flags
@@ -22,14 +22,14 @@ game_flags: .res 1
 ;   None
 ;
 ; Output:
-;   game_state = STATE_TITLE
+;   game_state = GAME_STATE_TITLE
 ;   game_flags = $00
 ;
 ; Clobbers:
 ;   A
 ;==========================================================================
 .proc state_init
-	LDA #STATE_TITLE
+	LDA #GAME_STATE_TITLE
 	STA game_state
 
 	LDA #$00

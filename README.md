@@ -73,4 +73,4 @@ Planned features:
 ## License
 
 - MIT
-- NES/Famicom is a trademark of Nintendo Co., Ltd.
+- NES/Famicom is a trademark of [Nintendo Co., Ltd](https://www.nintendo.com/).

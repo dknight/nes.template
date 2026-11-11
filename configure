@@ -5,6 +5,7 @@ set -e
 REQUIRED_TOOLS=(
     ca65
     ld65
+	make
 )
 
 echo "Checking dependencies..."

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -e
+
+REQUIRED_TOOLS=(
+    ca65
+    ld65
+)
+
+echo "Checking dependencies..."
+
+for tool in "${REQUIRED_TOOLS[@]}"; do
+    if ! command -v "$tool" >/dev/null 2>&1; then
+        echo "Error: '$tool' not found."
+        return 1
+    fi
+
+    echo "Found: $tool ($(command -v "$tool"))"
+done
+
+echo
+echo "All dependencies satisfied."
+echo "Configuration completed successfully."
+

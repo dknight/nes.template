@@ -1,7 +1,4 @@
 .include "../core/constants.inc"
-.include "maps.inc"
-
-.segment "CODE"
 
 .import tile_to_chr
 .import level_map_01
@@ -11,6 +8,8 @@
 .importzp page_count
 
 .export level_load
+
+.segment "CODE"
 
 ;==========================================================================
 ; Load current level into VRAM.

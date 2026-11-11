@@ -1,6 +1,4 @@
 .include "constants.inc"
-.include "apu.inc"
-.include "reset.inc"
 
 .import game_init
 .import enemies_draw

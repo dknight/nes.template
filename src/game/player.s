@@ -1,9 +1,7 @@
 .include "constants.inc"
 .include "player.inc"
-.include "collisions.inc"
 .include "../include/macros.inc"
 .include "../core/input.inc"
-.include "../gfx/sprites.inc"
 .include "../gfx/gfx.inc"
 
 .import oam

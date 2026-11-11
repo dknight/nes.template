@@ -1,6 +1,6 @@
 .include "../core/constants.inc"
-.include "../core/ppu.inc"
-.include "../core/nmi.inc"
+
+.import dma_transfer
 
 .exportzp frame_ready
 .exportzp vblank_counter
@@ -11,10 +11,12 @@
 ; NMI related related memory reservation
 ;==========================================================================
 .segment "ZEROPAGE"
+
 frame_ready:        .res 1
 vblank_counter:     .res 1
 
 .segment "CODE"
+
 ;==========================================================================
 ; NMI Routine: called every vBlank
 ;

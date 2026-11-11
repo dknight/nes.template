@@ -4,6 +4,7 @@
 .export input_poll
 
 .segment "ZEROPAGE"
+
 controller01_state: .res 1
 
 .segment "CODE"

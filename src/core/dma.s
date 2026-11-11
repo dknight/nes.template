@@ -1,7 +1,7 @@
 .include "../core/constants.inc"
-.include "../core/ppu.inc"
 .include "../gfx/gfx.inc"
-.include "../core/memory/oam.inc"
+
+.import oam
 
 .export dma_transfer
 

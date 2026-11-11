@@ -1,10 +1,13 @@
 .include "constants.inc"
-.include "ppu.inc"
+
+.import attribute_table
+.import default_palette
 
 .export ppu_load_palette
 .export ppu_load_attributes
 
 .segment "CODE"
+
 ;==========================================================================
 ; Load palette into PPU
 ;

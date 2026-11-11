@@ -1,5 +1,7 @@
 .include "constants.inc"
-.include "maps.inc"
+
+.importzp scratch00
+.import level_map_01
 
 .exportzp collisions_ptr
 .exportzp collisions_row_ptr
@@ -7,13 +9,14 @@
 .export collisions_get_tile
 .export collisions_load_level
 
-.importzp scratch00
 
 .segment "ZEROPAGE"
+
 collisions_ptr: .res 2
 collisions_row_ptr: .res 2
 
 .segment "RODATA"
+
 row_offset_lo:
 .byte   0,32,64,96,128,160,192,224
 .byte   0,32,64,96,128,160,192,224

@@ -12,14 +12,14 @@ BUILD_DIR := builds
 #--------------------------------------------------------------------------
 # Tools
 #--------------------------------------------------------------------------
-AS ?= ca65
-LD ?= ld65
+CA65 ?= ca65
+LD65 ?= ld65
 
 #--------------------------------------------------------------------------
 # Files
 #--------------------------------------------------------------------------
 SRC := $(shell find $(SRC_DIR) -name '*.s' | sort)
-OBJ := $(patsubst src/%.s,$(BUILD_DIR)/%.o,$(SRC))
+OBJ := $(patsubst $(SRC_DIR)/%.s,$(BUILD_DIR)/%.o,$(SRC))
 
 ROM := $(BUILD_DIR)/$(TARGET).nes
 CFG := nes.cfg
@@ -34,10 +34,10 @@ $(BUILD_DIR):
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.s
 	@mkdir -p $(dir $@)
-	$(AS) -g -o $@ $<
+	$(CA65) -g -I $(SRC_DIR) -I $(dir $<) -o $@ $<
 
 $(ROM): $(OBJ)
-	$(LD) -C $(CFG) -o $@ --dbgfile $@.dbg $^
+	$(LD65) -C $(CFG) -o $@ --dbgfile $@.dbg $^
 
 #--------------------------------------------------------------------------
 # Utilities
@@ -48,4 +48,4 @@ run: $(ROM)
 clean:
 	rm -rf $(BUILD_DIR)
 
-.PHONY: run clean
+.PHONY: all run clean

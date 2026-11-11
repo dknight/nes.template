@@ -7,8 +7,8 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/dknight/nes.template)
 ![Language](https://img.shields.io/badge/language-6502%20Assembly-purple)
 ![Assembler](https://img.shields.io/badge/assembler-cc65-orange)
-![GitHub repo size](https://img.shields.io/github/repo-size/dknight/nes.template)
-![License](https://img.shields.io/github/license/dknight/nes.template)
+![GitHub repo size](https://img.shields.io/github/repo-size/dknight/nes.template?color=blue)
+![License](https://img.shields.io/github/license/dknight/nes.template?color=blue)
 
 Most tutorials start with a blank screen and require writing a large amount of setup code before any gameplay can be implemented.
 

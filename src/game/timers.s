@@ -1,5 +1,8 @@
 .include "constants.inc"
-.include "timers.inc"
+
+.importzp frame_ready
+.importzp vblank_counter
+.importzp game_timer
 
 .export timers_update
 .export wait_frame

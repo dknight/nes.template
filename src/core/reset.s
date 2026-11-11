@@ -3,6 +3,15 @@
 .include "reset.inc"
 
 .import game_init
+.import enemies_draw
+.import player_draw
+.import oam_begin
+.import oam_end
+.import sprite_clear_oam
+.import main
+.import ppu_load_attributes
+.import ppu_load_palette
+
 .export reset
 
 .segment "CODE"
@@ -15,7 +24,7 @@
 	LDA #$00
 	STA PPU_CTRL			; disable NMI
 	STA PPU_MASK			; disable rendering
-	STA APU_DM_CONTROL		; disable DMC IRQ
+	STA APU_DMC_CTRL		; disable DMC IRQ
 	LDA #$40
 	STA APU_FRAME_COUNTER	; disable APU frame IRQ
 	

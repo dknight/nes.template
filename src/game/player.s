@@ -6,9 +6,14 @@
 .include "../gfx/sprites.inc"
 .include "../gfx/gfx.inc"
 
+.import oam
 .import sprite_draw_meta
+.import collisions_is_solid
+.import collisions_get_tile
+.import collisions_load_level
 .importzp ptr_lo
 .importzp ptr_hi
+.importzp controller01_state
 
 .exportzp player_x
 .exportzp player_y
@@ -22,8 +27,8 @@
 
 .segment "ZEROPAGE"
 
-player_x:	   .res 1
-player_y:	   .res 1
+player_x:       .res 1
+player_y:       .res 1
 player_next_x:  .res 1
 player_tile_x:  .res 1
 player_next_y:  .res 1
@@ -39,10 +44,10 @@ player_tile_y:  .res 1
 ;==========================================================================
 player_metasprite:
     ; Y, TILE, ATTR, X
-    .byte 0, $40, OAM_PAL0, 0
-    .byte 0, $41, OAM_PAL0, 8
-    .byte 8, $50, OAM_PAL0, 0
-    .byte 8, $51, OAM_PAL0, 8
+    .byte 0, $40, OAM_PALETTE_0, 0
+    .byte 0, $41, OAM_PALETTE_0, 8
+    .byte 8, $50, OAM_PALETTE_0, 0
+    .byte 8, $51, OAM_PALETTE_0, 8
 
 .segment "CODE"
 

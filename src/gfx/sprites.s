@@ -1,5 +1,4 @@
 .include "gfx.inc"
-.include "sprites.inc"
 
 .import dma_transfer
 .import oam

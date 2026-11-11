@@ -1,12 +1,15 @@
 .include "constants.inc"
-.include "game.inc"
-.include "collisions.inc"
-.include "level.inc"
 
-.exportzp game_timer
+.import collisions_load_level
+.import player_init
+.import state_init
+.import level_load
+
 .export game_init
+.exportzp game_timer
 
 .segment "ZEROPAGE"
+
 game_timer: .res 1
 
 .segment "CODE"

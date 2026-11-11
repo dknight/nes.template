@@ -1,2 +1,0 @@
-.import dma_transfer
-

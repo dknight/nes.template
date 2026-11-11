@@ -1,6 +1,3 @@
-.importzp controller01_state
-.import oam
-
 ;==========================================================================
 ; Calculate player's left edge tile coordinate.
 ; Expects player's X position in A.

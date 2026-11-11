@@ -3,14 +3,14 @@
 
 .segment "CODE"
 
-.export level_load
-
-.importzp ptr_lo
-.importzp ptr_hi
-.importzp page_count
 .import tile_to_chr
 .import level_map_01
 .import nametable
+.importzp ptr_lo
+.importzp ptr_hi
+.importzp page_count
+
+.export level_load
 
 ;==========================================================================
 ; Load current level into VRAM.

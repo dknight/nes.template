@@ -8,10 +8,10 @@
 ; byte 2 = attributes
 ; byte 3 = X position
 ;==========================================================================
-OAM_OFFSET_Y      = $00
-OAM_OFFSET_TILE   = $01
-OAM_OFFSET_ATTR   = $02
-OAM_OFFSET_X      = $03
+OAM_OFFSET_Y        = $00
+OAM_OFFSET_TILE     = $01
+OAM_OFFSET_ATTR     = $02
+OAM_OFFSET_X        = $03
 
 ;==========================================================================
 ; Attribute flags
@@ -32,4 +32,3 @@ OAM_FLIP_VERTICAL   = %10000000
 
 ; Sprite DMA Register
 OAM_DMA             = $4014
-

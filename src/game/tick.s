@@ -2,6 +2,11 @@
 
 .export game_tick
 
+.import camera_update
+.import projectiles_update
+.import enemies_update
+.import player_update
+
 .segment "CODE"
 
 ;==========================================================================

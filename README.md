@@ -1,5 +1,7 @@
 # NES Game Template
 
+![NES Template](animation-nes-template-promo.gif)
+
 Most tutorials start with a blank screen and require writing a large amount of setup code before any gameplay can be implemented.
 
 The template provides a clean project structure and a working game loop so developers can immediately focus on writing game logic instead of hardware initialization.

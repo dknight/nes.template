@@ -1,4 +1,4 @@
-.include "constants.inc"
+.include "game.inc"
 
 .importzp frame_ready
 .importzp vblank_counter

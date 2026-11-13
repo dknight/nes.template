@@ -1,4 +1,4 @@
-.include "constants.inc"
+.include "collisions.inc"
 
 .importzp scratch00
 .import level_map_01
@@ -8,7 +8,6 @@
 .export collisions_is_solid
 .export collisions_get_tile
 .export collisions_load_level
-
 
 .segment "ZEROPAGE"
 

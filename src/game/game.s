@@ -1,5 +1,3 @@
-.include "constants.inc"
-
 .import collisions_load_level
 .import player_init
 .import state_init

@@ -1,4 +1,4 @@
-.include "constants.inc"
+.include "game.inc"
 
 .exportzp game_state
 .exportzp game_flags

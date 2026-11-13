@@ -1,17 +1,17 @@
-.include "constants.inc"
+.include "game.inc"
 .include "player.inc"
 .include "../include/macros.inc"
 .include "../core/input.inc"
 .include "../gfx/gfx.inc"
 
+.importzp ptr_lo
+.importzp ptr_hi
+.importzp controller01_state
 .import oam
 .import sprite_draw_meta
 .import collisions_is_solid
 .import collisions_get_tile
 .import collisions_load_level
-.importzp ptr_lo
-.importzp ptr_hi
-.importzp controller01_state
 
 .exportzp player_x
 .exportzp player_y
@@ -19,18 +19,22 @@
 .exportzp player_tile_x
 .exportzp player_next_y
 .exportzp player_tile_y
+.exportzp player_collision_end_y
+.exportzp player_collision_end_x
 .export player_update
 .export player_draw
 .export player_init
 
 .segment "ZEROPAGE"
 
-player_x:       .res 1
-player_y:       .res 1
-player_next_x:  .res 1
-player_tile_x:  .res 1
-player_next_y:  .res 1
-player_tile_y:  .res 1
+player_x:               .res 1
+player_y:               .res 1
+player_next_x:          .res 1
+player_tile_x:          .res 1
+player_next_y:          .res 1
+player_tile_y:          .res 1
+player_collision_end_y: .res 1
+player_collision_end_x: .res 1
 
 .segment "RODATA"
 
@@ -149,57 +153,36 @@ player_metasprite:
 .endproc
 
 ;==========================================================================
-; Move player left by PLAYER_SPEED if movement is allowed.
+; Move player up by PLAYER_SPEED if movement is allowed.
 ;
 ; Input:
 ;   player_x (pixels)
 ;   player_y (pixels)
 ;
 ; Output:
-;   player_x updated if no collision is detected.
+;   player_y updated if no collision is detected.
 ;
 ; Clobbers:
 ;   A, Y
 ;==========================================================================
-.proc player_move_left
-	; Check screen boundary
-	LDA player_x
-	CMP #(PLAYER_MIN_X + PLAYER_SPEED)
-	BCC @blocked
-
+.proc player_move_up
 	; Calculate next position
+	LDA player_y
 	SEC
 	SBC #PLAYER_SPEED
-	STA player_next_x
+	STA player_next_y
 
-	; Left edge
-	LDA player_next_x
-	macro_pixel_to_tile
-	STA player_tile_x
+	; Check screen boundary
+	CMP #PLAYER_MIN_Y
+	BCC @blocked
 
-	; Bottom corner
-	LDA player_y
-	player_add_bottom_edge (PLAYER_HEIGHT - 1)
-	STA player_tile_y
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
-	BCS @blocked
-
-	; Top corner
-	LDA player_y
-	macro_pixel_to_tile
-	STA player_tile_y
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
+	; Check vertical collision
+	JSR player_check_vertical_collision
 	BCS @blocked
 
 	; Apply movement
-	LDA player_next_x
-	STA player_x
+	LDA player_next_y
+	STA player_y
 
 @blocked:
 	RTS
@@ -219,103 +202,27 @@ player_metasprite:
 ;   A, Y
 ;==========================================================================
 .proc player_move_right
-	; Calculate next position
-	LDA player_x
-	CLC
-	ADC #PLAYER_SPEED
-	STA player_next_x
+    ; Calculate next position
+    LDA player_x
+    CLC
+    ADC #PLAYER_SPEED
+    STA player_next_x
 
-	; Check screen boundary
-	CMP #PLAYER_MAX_X
-	BCS @blocked
+    ; Check screen boundary
+    CMP #(PLAYER_MAX_X + 1)
+    BCS @blocked
 
-	; Right edge
-	player_add_right_edge (PLAYER_WIDTH - 1)
-	STA player_tile_x
+    ; Check horizontal collision
+    JSR player_check_horizontal_collision
+    BCS @blocked
 
-	; Bottom corner
-	LDA player_y
-	player_add_bottom_edge (PLAYER_HEIGHT - 1)
-	STA player_tile_y
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
-	BCS @blocked
-
-	; Top corner
-	LDA player_y
-	macro_pixel_to_tile
-	STA player_tile_y
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
-	BCS @blocked
-
-	; Apply movement
-	LDA player_next_x
-	STA player_x
+    ; Apply movement
+    LDA player_next_x
+    STA player_x
 
 @blocked:
-	RTS
-.endproc
+    RTS
 
-;==========================================================================
-; Move player up by PLAYER_SPEED if movement is allowed.
-;
-; Input:
-;   player_x (pixels)
-;   player_y (pixels)
-;
-; Output:
-;   player_y updated if no collision is detected.
-;
-; Clobbers:
-;   A, Y
-;==========================================================================
-.proc player_move_up
-	; Check screen boundary
-	LDA player_y
-	CMP #(PLAYER_MIN_Y + PLAYER_SPEED)
-	BCC @blocked
-
-	; Calculate next position
-	SEC
-	SBC #PLAYER_SPEED
-	STA player_next_y
-
-	; Left edge
-	LDA player_x
-	macro_pixel_to_tile
-	STA player_tile_x
-
-	; Top edge
-	LDA player_next_y
-	macro_pixel_to_tile
-	STA player_tile_y
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
-	BCS @blocked
-	
-	; Right edge
-	LDA player_x
-	player_add_right_edge (PLAYER_WIDTH -1)
-	STA player_tile_x
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
-	BCS @blocked
-
-	; Apply movement
-	LDA player_next_y
-	STA player_y
-
-@blocked:
-	RTS
 .endproc
 
 ;==========================================================================
@@ -339,32 +246,11 @@ player_metasprite:
 	STA player_next_y
 
 	; Check screen boundary
-	CMP #PLAYER_MAX_Y
+	CMP #(PLAYER_MAX_Y + 1)
 	BCS @blocked
 
-	; Left edge
-	LDA player_x
-	macro_pixel_to_tile
-	STA player_tile_x
-
-	; Bottom edge
-	LDA player_next_y
-	player_add_bottom_edge (PLAYER_HEIGHT - 1)
-	STA player_tile_y
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
-	BCS @blocked
-
-	; Right edge
-	LDA player_x
-	player_add_right_edge (PLAYER_WIDTH -1)
-	STA player_tile_x
-
-	LDA player_tile_x
-	LDY player_tile_y
-	JSR collisions_is_solid
+	; Check vertical collision
+	JSR player_check_vertical_collision
 	BCS @blocked
 
 	; Apply movement
@@ -373,6 +259,189 @@ player_metasprite:
 
 @blocked:
 	RTS
+.endproc
+
+;==========================================================================
+; Move player left by PLAYER_SPEED if movement is allowed.
+;
+; Input:
+;   player_x (pixels)
+;   player_y (pixels)
+;
+; Output:
+;   player_x updated if no collision is detected.
+;
+; Clobbers:
+;   A, Y
+;==========================================================================
+.proc player_move_left
+	; Calculate next position
+	LDA player_x
+	SEC
+	SBC #PLAYER_SPEED
+	STA player_next_x
+
+	; Check screen boundary
+	CMP #PLAYER_MIN_X
+	BCC @blocked
+
+	; Check horizontal collision
+	JSR player_check_horizontal_collision
+	BCS @blocked
+
+	; Apply movement
+	LDA player_next_x
+	STA player_x
+
+@blocked:
+	RTS
+.endproc
+
+;==========================================================================
+; Check vertical collision along the player's leading edge.
+;
+; Input:
+;   player_y       Current Y position.
+;   player_next_y  Proposed Y position.
+;
+; Output:
+;   C = 1 if collision detected.
+;   C = 0 if movement is allowed.
+;
+; Clobbers:
+;   A, Y
+;==========================================================================
+.proc player_check_vertical_collision
+	; Determine movement direction
+	LDA player_next_y
+	CMP player_y
+	BCC @moving_up
+
+@moving_down:
+	; Calculate bottom edge of the proposed position
+	LDA player_next_y
+	player_add_bottom_edge (PLAYER_HEIGHT - 1)
+	STA player_tile_y
+	JMP @calculate_horizontal_range
+
+@moving_up:
+	; Calculate top edge of the proposed position
+	LDA player_next_y
+	macro_pixel_to_tile
+	STA player_tile_y
+
+@calculate_horizontal_range:
+	; Calculate left tile
+	LDA player_x
+	macro_pixel_to_tile
+	STA player_tile_x
+
+	; Calculate right tile
+	LDA player_x
+	player_add_right_edge (PLAYER_WIDTH - 1)
+	STA player_collision_end_x
+
+@check_column:
+	; Check current tile
+	LDA player_tile_x
+	LDY player_tile_y
+	JSR collisions_is_solid
+	BCS @collision
+
+	; Have we checked the last column
+	LDA player_tile_x
+	CMP player_collision_end_x
+	BEQ @no_collision
+
+	; Move to the next column
+	INC player_tile_x
+	JMP @check_column
+
+@collision:
+	SEC
+	RTS
+
+@no_collision:
+	CLC
+	RTS
+.endproc
+
+;==========================================================================
+; Check horizontal collision along the player's leading edge.
+;
+; Determines movement direction and checks every tile along the
+; corresponding vertical edge of the player's bounding box.
+;
+; Input:
+;   player_x       Current X position.
+;   player_y       Current Y position.
+;   player_next_x  Proposed X position.
+;
+; Output:
+;   C = 1 if collision detected.
+;   C = 0 if movement is allowed.
+;
+; Clobbers:
+;   A, Y
+;
+; Uses:
+;   player_tile_x
+;   player_tile_y
+;   player_collision_end_y
+;==========================================================================
+.proc player_check_horizontal_collision
+    ; Determine movement direction
+    LDA player_next_x
+    CMP player_x
+    BCC @moving_left
+
+@moving_right:
+    ; Calculate right edge of the proposed position
+    LDA player_next_x
+    player_add_right_edge (PLAYER_WIDTH - 1)
+    STA player_tile_x
+    JMP @calculate_vertical_range
+
+@moving_left:
+    ; Calculate left edge of the proposed position
+    LDA player_next_x
+    macro_pixel_to_tile
+    STA player_tile_x
+
+@calculate_vertical_range:
+    ; Calculate top tile
+    LDA player_y
+    macro_pixel_to_tile
+    STA player_tile_y
+
+    ; Calculate bottom tile
+    LDA player_y
+    player_add_bottom_edge (PLAYER_HEIGHT - 1)
+    STA player_collision_end_y
+
+@check_row:
+    ; Check current tile
+    LDA player_tile_x
+    LDY player_tile_y
+    JSR collisions_is_solid
+    BCS @collision
+
+    ; Have we checked the last row?
+    LDA player_tile_y
+    CMP player_collision_end_y
+    BEQ @no_collision
+
+    ; Move to the next row
+    INC player_tile_y
+    JMP @check_row
+
+@collision:
+    SEC
+    RTS
+
+@no_collision:
+    CLC
+    RTS
 .endproc
 
 ;==========================================================================
@@ -389,14 +458,14 @@ player_metasprite:
 ;   A
 ;==========================================================================
 .proc player_draw
-	; Load metasprite pointer.
+	; Load metasprite pointer
 	LDA #<player_metasprite
 	STA ptr_lo
 
 	LDA #>player_metasprite
 	STA ptr_hi
 
-	; Pass player coordinates.
+	; Pass player coordinates
 	LDA player_x
 	LDX player_y
 
@@ -421,8 +490,10 @@ player_metasprite:
 .proc player_init
 	LDA #PLAYER_INIT_X
 	STA player_x
+
 	LDA #PLAYER_INIT_Y
 	STA player_y
+
 	RTS
 .endproc
 

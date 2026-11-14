@@ -27,7 +27,7 @@
 	LDX #$00
 
 @palette_loop:
-	LDA default_palette,X
+	LDA default_palette, X
 	STA PPU_DATA
 	
 	INX
@@ -50,7 +50,7 @@
 	LDX #$00
 
 @attr_loop:
-	LDA attribute_table,X
+	LDA attribute_table, X
 	STA PPU_DATA
 
 	INX
